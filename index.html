@@ -25,7 +25,7 @@
 		<script src='js/libs/blob.js'></script>
 		<script src='js/libs/filesaver.js'></script>
 
-		<script src='js/scripts/page_switcher.js'></script>
+		<!--<script src='js/scripts/page_switcher.js'></script>-->
 	</head>
 	<body>
 		<noscript>
@@ -118,17 +118,40 @@
 			</div>
 		</noscript>
 
-		<header class='header'>
+		<header class='header font-dosis no-select'>
 			<a href=''><img class='logo' src='images/logo.png' /></a>
-			<span class='phrase font-dosis'>
+			<span class='phrase'>
 				A CrunchyHotDogs' Production
 				<br />
-				Info -> <a class='readme' href='https://github.com/CrunchyHotDogs/BatGen' target='_blank'>BatGen</a>
+				Info &#x21AA; <a class='readme' href='https://github.com/CrunchyHotDogs/BatGen' target='_blank'>BatGen</a>
 			</span>
 		</header>
-		<div id='content' class='body'></div>
-		<footer class='footer font-dosis'>
-			BatGen EVOLVED&copy; 2018 All Chooches Reserved
+
+
+		<div id='content' class='body'>
+			<div class='option-area'>
+				<div class='new-field-area'>
+					<div class='new-field-button video'>VIDEO</div>
+					<div class='new-field-button audio'>AUDIO</div>
+					<div class='new-field-button subtitle'>SUBTITLE</div>
+				</div>
+			</div>
+
+
+
+			<div class='download-area'>
+				<div class='button-area'>
+					<div class='button left font-dosis no-select'>DOWNLOAD</div><div class='button right font-dosis no-select'>COPY TEXT</div>
+				</div>
+				<textarea id='downloadText' spellcheck='false' disabled></textarea>
+			</div>
+		</div>
+
+
+
+
+		<footer class='footer font-dosis no-select clear'>
+			<span>BatGen EVOLVED&copy; 2018 All Chooches Reserved</span>
 		</footer>
 	</body>
 </html>

@@ -1,6 +1,208 @@
 /*
+Variables
+*/
+$color_scheme_body: #EAEAEA;
+$color_scheme_white: #ffffff;
+$color_scheme_red: #BD1E1E;
+$color_scheme_disabled: #808080;
+$color_scheme_button_hover: #d9d9d9;
+$color_scheme_dark_blue: #18206F;
+$color_scheme_light_blue: #26547C;
+
+$border_radius_button: 5px;
+$border_radius_field: 3px;
+
+/*
 	MAIN STYLESHEET
 */
+
+/*
+	STYLES FOR INPUT FIELDS
+*/
+.field {
+	display: block;
+	margin: 5px 0;
+	height: 45px;
+
+	* {
+		display: inline-block;
+	}
+}
+.container-textbox {
+	position: relative;
+	margin: 15px 0;
+
+	input[disabled][type='text']:focus {
+		border: 2px solid $color_scheme_disabled !important;
+	}
+	input[disabled][type='text'] + label {
+		background: $color_scheme_disabled !important;
+	}
+	input[type='text'] {
+		display: inline-block;
+		height: 40px;
+		box-sizing: border-box;
+		outline: none;
+		border: 2px solid $color_scheme_disabled;
+		border-radius: $border_radius_field;
+		padding: 10px 10px 10px 165px;
+		font-weight: bold;
+		background-color: $color_scheme_white;
+		&:focus {
+			border: 2px solid $color_scheme_dark_blue;
+		}
+	}
+	input[type='text'] + label {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		height: 40px;
+		line-height: 40px;
+		color: $color_scheme_white;
+		border-radius: $border_radius_field 0 0 $border_radius_field;
+		background: $color_scheme_red;
+	}
+
+	.file {
+		width: 700px;
+	}
+	.video {
+		width: 400px;
+		+ label {
+			padding: 0 34px 0 20px !important;
+		}
+	}
+	.audio {
+		width: 400px;
+		+ label {
+			padding: 0 33px 0 20px !important;
+		}
+	}
+	.subtitle {
+		width: 400px;
+		+ label {
+			padding: 0 20px 0 20px !important;
+		}
+	}
+}
+.container-dropdown {
+	select {
+		height: 40px;
+		padding-left: 15px;
+		padding-right: 10px;
+		outline: none;
+		border: 2px solid $color_scheme_disabled;
+		border-radius: $border_radius_field;
+		font-weight: bold;
+
+		&:focus {
+			border: 2px solid $color_scheme_dark_blue;
+		}
+	}
+
+}
+
+
+/*
+	STYLES FOR THE OPTIONS AREA
+*/
+.option-area {
+	width: 95%;
+	margin: 0 auto;
+	border: 2px solid $color_scheme_disabled;
+	border-top: none;
+	border-radius: $border_radius_field;
+	height: 100px;
+
+	.new-field-area {
+		width: 130px;
+		margin-left: 10px;
+
+		.new-field-button {
+			display: block;
+			margin: 0 auto;
+			width: 110px;
+			border: 2px solid $color_scheme_disabled;
+			padding: 5px 0;
+			text-align: center;
+
+			&:hover {
+				cursor: pointer;
+				background-color: $color_scheme_button_hover;
+			}
+
+			&.video {
+				border-top-left-radius: $border_radius_button;
+				border-top-right-radius: $border_radius_button;
+				border-bottom: none;
+			}
+			&.audio {
+
+			}
+			&.subtitle {
+				border-bottom-left-radius: $border_radius_button;
+				border-bottom-right-radius: $border_radius_button;
+				border-top: none;
+			}
+		}
+	}
+}
+
+/*
+	STYLES FOR THE TEXTAREA
+*/
+.download-area {
+	position: relative;
+	width: 95%;
+	margin: 150px auto 0 auto;
+
+	textarea {
+		position: relative;
+		width: 100%;
+		height: 400px;
+		outline: none;
+		border: 2px solid $color_scheme_disabled;
+		border-radius: $border_radius_field;
+		resize: none;
+		z-index: 1;
+	}
+	.button-area {
+		position: relative;
+		width: 100%;
+		margin-bottom: -2.25px;
+		text-align: center;
+		z-index: 2;
+
+		.button {
+			display: inline-block;
+			height: 50px;
+			width: 175px;
+			text-align: center;
+			line-height: 50px;
+			border: 2px solid $color_scheme_disabled;
+			border-bottom: none;
+			font-weight: bold;
+			font-size: 1.2em;
+
+			&.left {
+				border-right-width: 1.25px;
+				border-top-left-radius: 5px;
+			}
+			&.right {
+				border-left-width: 1.25px;
+				border-top-right-radius: 5px;
+			}
+			&:hover {
+				cursor: pointer;
+				background-color: $color_scheme_button_hover;
+			}
+		}
+	}
+}
+
+
+
 
 
 /*
@@ -8,12 +210,12 @@
 	EDIT WITH DESIRED DESIGN
 	#591.23
 */
-
 .header {
 	color: #F3F4F5;
-	background-color: #18206F;
-	box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.15);
+	background-color: $color_scheme_dark_blue;
+	box-shadow: -0.5px 5px 2px rgba(0, 0, 0, 0.75);
 	padding: 20px 40px;
+	margin-bottom: 5px;
 	position: relative;
 
 	.logo {
@@ -33,14 +235,17 @@
 	}
 }
 .body {
-	background-color: #F5E2C8;
+	padding: 25px 25px 100px 25px;
+	background-color: $color_scheme_body;
 }
-.footer{
+.footer {
 	color: #F3F4F5;
-	background-color: #26547C;
+	background-color: $color_scheme_light_blue;
+	box-shadow: -0.5px -3px 2px rgba(0, 0, 0, 0.75);
 	width: 90%;
 	text-align: left;
 	padding: 45px 5%;
+	margin-top: 3px;
 }
 /*
 	END #591.23
