@@ -12,6 +12,9 @@ $color_scheme_light_blue: #26547C;
 $border_radius_button: 5px;
 $border_radius_field: 3px;
 
+//Checkbox Variables
+
+
 /*
 	MAIN STYLESHEET
 */
@@ -45,7 +48,7 @@ $border_radius_field: 3px;
 		outline: none;
 		border: 2px solid $color_scheme_disabled;
 		border-radius: $border_radius_field;
-		padding: 10px 10px 10px 165px;
+		padding: 10px 10px 10px 135px;
 		font-weight: bold;
 		background-color: $color_scheme_white;
 		&:focus {
@@ -70,13 +73,13 @@ $border_radius_field: 3px;
 	.video {
 		width: 400px;
 		+ label {
-			padding: 0 34px 0 20px !important;
+			padding: 0 48px 0 20px !important;
 		}
 	}
 	.audio {
 		width: 400px;
 		+ label {
-			padding: 0 33px 0 20px !important;
+			padding: 0 47px 0 20px !important;
 		}
 	}
 	.subtitle {
@@ -102,22 +105,40 @@ $border_radius_field: 3px;
 	}
 
 }
+.container-checkbox {
+	height: 30px;
+
+	span {
+		display: inline-block;
+		height: 100%;
+		vertical-align: middle;
+		margin-left: 8px;
+		line-height: 15px;
+	}
+}
 
 
 /*
 	STYLES FOR THE OPTIONS AREA
 */
 .option-area {
+	display: block;
 	width: 95%;
 	margin: 0 auto;
 	border: 2px solid $color_scheme_disabled;
 	border-top: none;
 	border-radius: $border_radius_field;
-	height: 100px;
+	height: 120px;
+
+	div {
+		display: inline-block;
+		vertical-align: top;
+	}
 
 	.new-field-area {
-		width: 130px;
+		width: 12.5%;
 		margin-left: 10px;
+		height: 100px;
 
 		.new-field-button {
 			display: block;
@@ -126,6 +147,7 @@ $border_radius_field: 3px;
 			border: 2px solid $color_scheme_disabled;
 			padding: 5px 0;
 			text-align: center;
+			background-color: $color_scheme_body;
 
 			&:hover {
 				cursor: pointer;
@@ -146,6 +168,23 @@ $border_radius_field: 3px;
 				border-top: none;
 			}
 		}
+	}
+	.counter-start-area {
+		width: 15%;
+	}
+	.counter-checkbox-area {
+		width: 25%;
+		height: 100px;
+
+		> * {
+			display: block;
+			margin: 2px 0;
+		}
+	}
+	.remove-tracks-area {
+		background-color: lightpink;
+		width: 25%;
+		height: 100px;
 	}
 }
 
