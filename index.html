@@ -15,17 +15,6 @@
 		<link rel='stylesheet' type='text/css' href='stylesheets/css/style.css' />
 		<link rel='stylesheet' type='text/css' href='stylesheets/css/animate.css' />
 		<link rel='stylesheet' type='text/css' href='stylesheets/css/checkboxes.css' />
-
-		<script src='js/libs/jquery.js'></script>
-		<script src='js/libs/underscore.js'></script>
-		<script src='js/libs/backbone.js'></script>
-		<script src='js/libs/mousetrap.js'></script>
-		<script src='js/libs/sortable.js'></script>
-		<script src='js/libs/popper.js'></script>
-		<script src='js/libs/blob.js'></script>
-		<script src='js/libs/filesaver.js'></script>
-
-		<!--<script src='js/scripts/page_switcher.js'></script>-->
 	</head>
 	<body>
 		<noscript>
@@ -131,9 +120,9 @@
 		<div id='content' class='body'>
 			<div class='option-area font-dosis'>
 				<div class='new-field-area'>
-					<div class='new-field-button video'>VIDEO</div>
-					<div class='new-field-button audio'>AUDIO</div>
-					<div class='new-field-button subtitle'>SUBTITLE</div>
+					<div id='addTrackVideo' class='new-field-button no-select video'>VIDEO</div>
+					<div id='addTrackAudio' class='new-field-button no-select audio'>AUDIO</div>
+					<div id='addTrackSubtitle' class='new-field-button no-select subtitle'>SUBTITLE</div>
 				</div>
 				<div class='counter-start-area'>
 					<span>Counter Start Number</span>
@@ -185,47 +174,9 @@
 				</div>
 			</div>
 
+			<div id='userEntryFields'>
 
-			<div class='field'>
-				<div class='container-textbox'>
-					<input type='text' class='file' value='bonkai77 Encodes For Life' />
-					<label>FILE TITLE</label>
-				</div>
 			</div>
-
-			<div class='field'>
-				<div class='container-textbox'>
-					<input type='text' class='video' value='bonkai77 Encodes For Life' />
-					<label>VIDEO</label>
-				</div>
-				<div class='container-dropdown'>
-					<select>
-						<option value='yes'>Yes</option>
-						<option value='no'>No</option>
-					</select>
-				</div>
-				<div class='container-dropdown'>
-					<select>
-						<option value='yes'>Undefined</option>
-						<option value='no'>English</option>
-					</select>
-				</div>
-			</div>
-			<div class='field'>
-				<div class='container-textbox'>
-					<input type='text' class='audio' value='[ENG] AAC 2.0' />
-					<label>AUDIO</label>
-				</div>
-			</div>
-			<div class='field'>
-				<div class='container-textbox'>
-					<input type='text' class='subtitle' value='[ENG] Signs and Songs' />
-					<label>SUBTITLE</label>
-				</div>
-			</div>
-
-
-
 
 			<div class='download-area'>
 				<div class='button-area'>
@@ -241,5 +192,97 @@
 		<footer class='footer font-dosis no-select clear'>
 			<span>BatGen EVOLVED&copy; 2018 All Chooches Reserved</span>
 		</footer>
+
+
+		<!--SCRIPT TAGS AND TEMPLATES-->
+		<script type='text/template' id='Textbox-template'>
+			<div class='container-textbox'>
+				<input type='text' class="listener-textbox <%= variables.className %>" />
+				<label><%= variables.title %></label>
+			</div>
+		</script>
+		<script type='text/template' id='DropdownLanguage-template'>
+			<div class='container-dropdown'>
+				<select>
+					<option value='und'>Undefined</option>
+					<option value='eng'>English</option>
+					<option value='jap'>Japanese</option>
+					<option value='fre'>French</option>
+					<option value='ger'>German</option>
+					<option value='spa'>Spanish</option>
+				</select>
+			</div>
+		</script>
+		<script type='text/template' id='DropdownDefault-template'>
+			<div class='container-dropdown'>
+				<select>
+					<option value='yes'>Yes</option>
+					<option value='no'>No</option>
+				</select>
+			</div>
+		</script>
+		<script type='text/template' id='DropdownForced-template'>
+			<div class='container-dropdown'>
+				<select>
+					<option value='yes'>Yes</option>
+					<option value='no'>No</option>
+				</select>
+			</div>
+		</script>
+
+		<script type='text/template' id='VideoField-template'>
+			<div class='field' data-uid="<%= uid %>">
+				<%= textbox.item(textbox) %>
+				<%= ddDefault.item(ddDefault) %>
+				<%= ddLanguage.item(ddLanguage) %>
+			</div>
+		</script>
+		<script type='text/template' id='AudioField-template'>
+			<div class='field' data-uid="<%= uid %>">
+				<%= textbox.item(textbox) %>
+				<%= ddDefault.item(ddDefault) %>
+				<%= ddLanguage.item(ddLanguage) %>
+			</div>
+		</script>
+		<script type='text/template' id='SubtitleField-template'>
+			<div class='field' data-uid="<%= uid %>">
+				<%= textbox.item(textbox) %>
+				<%= ddDefault.item(ddDefault) %>
+				<%= ddLanguage.item(ddLanguage) %>
+				<%= ddForced.item(ddForced) %>
+			</div>
+		</script>
+
+		<script src='js/libs/jquery.js'></script>
+		<script src='js/scripts/functions.js'></script>
+		<script src='js/libs/underscore.js'></script>
+		<script src='js/libs/backbone.js'></script>
+		<script src='js/backbone/backbone.js'></script>
+		<script src='js/libs/mousetrap.js'></script>
+		<script src='js/libs/sortable.js'></script>
+		<script src='js/libs/popper.js'></script>
+		<script src='js/libs/blob.js'></script>
+		<script src='js/libs/filesaver.js'></script>
+
+		<!-- PAGE SCRIPTS -->
+		<script>
+			$(document).ready(function() {
+				$('#addTrackVideo').click(function() {
+					var new_video = new backboneModel_VideoField();
+					collection.add(new_video);
+					view.render();
+				});
+				$('#addTrackAudio').click(function() {
+					var new_audio = new backboneModel_AudioField();
+					collection.add(new_audio);
+					view.render();
+				});
+				$('#addTrackSubtitle').click(function() {
+					var new_subtitle = new backboneModel_SubtitleField();
+					collection.add(new_subtitle);
+					view.render();
+				});
+			});
+		</script>
 	</body>
 </html>

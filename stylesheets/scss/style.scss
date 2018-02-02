@@ -137,7 +137,7 @@ $border_radius_field: 3px;
 .option-area {
 	display: block;
 	width: 95%;
-	margin: 0 auto;
+	margin: 0 auto 45px auto;
 	border: 2px solid $color_scheme_disabled;
 	border-top: none;
 	border-radius: $border_radius_field;
@@ -215,7 +215,7 @@ $border_radius_field: 3px;
 .download-area {
 	position: relative;
 	width: 95%;
-	margin: 150px auto 0 auto;
+	margin: 75px auto 0 auto;
 
 	textarea {
 		position: relative;
