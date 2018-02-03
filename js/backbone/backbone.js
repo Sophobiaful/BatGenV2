@@ -127,9 +127,16 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 			model.constructBatch();
 		});
 	},
+	printTrackOrder: function() {
+		var order = '';
+		for (var i = 0; i < this.length; i++) {
+			order += '0:' + this.models[i].get('trackNumber') + ',';
+		}
+		order = order.slice(0,-1);
+		return order;
+	},
 	reOrderTrackNumbers: function() {
 		for (var i = 0; i < this.length; i++) {
-			console.log(i);
 			currentModel = this.models[i];
 
 			currentModel.set('trackNumber', i);
