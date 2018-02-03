@@ -12,6 +12,14 @@ var temp_Subtitle = _.template($('#SubtitleField-template').html());
 
 
 /*
+	Variables
+*/
+var ddLanguageContents = [['und','Undefined'], ['eng','English'], ['jap','Japanese'], ['fre','French'], ['ger','German'], ['spa','Spanish']];
+var ddDefaultContents = [['yes','Yes'], ['no','No']];
+var ddForcedContents = [['yes','Yes'], ['no','No']];
+
+
+/*
 	Models
 */
 //Base model. Used for the collection.
@@ -35,7 +43,7 @@ var backboneModel_VideoField = backboneModel_Field.extend({
 		trackNumber: 0,
 		title: '',
 		language: 'und',
-		defaultTrack: 'yes',
+		default: 'yes',
 		batch: 'error:002-video-default'
 	},
 	constructBatch: function() {
@@ -43,7 +51,7 @@ var backboneModel_VideoField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abTRACKba',this.get('trackNumber'));
 		bat = __replace(bat, 'abTITLEba',this.get('title'));
 		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
-		bat = __replace(bat, 'abDEFAULTba',this.get('defaultTrack'));
+		bat = __replace(bat, 'abDEFAULTba',this.get('default'));
 
 		this.set({batch:bat});
 	}
@@ -61,7 +69,7 @@ var backboneModel_AudioField = backboneModel_Field.extend({
 		trackNumber: 0,
 		title: '',
 		language: 'und',
-		defaultTrack: 'yes',
+		default: 'yes',
 		batch: 'error:003-audio-default'
 	},
 	constructBatch: function() {
@@ -69,7 +77,7 @@ var backboneModel_AudioField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abTRACKba',this.get('trackNumber'));
 		bat = __replace(bat, 'abTITLEba',this.get('title'));
 		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
-		bat = __replace(bat, 'abDEFAULTba',this.get('defaultTrack'));
+		bat = __replace(bat, 'abDEFAULTba',this.get('default'));
 
 		this.set({batch:bat});
 	}
@@ -87,8 +95,8 @@ var backboneModel_SubtitleField = backboneModel_Field.extend({
 		trackNumber: 0,
 		title: '',
 		language: 'und',
-		defaultTrack: 'yes',
-		forcedTrack: 'yes',
+		default: 'yes',
+		forced: 'yes',
 		batch: 'error:003-subtitle-default'
 	},
 	constructBatch: function() {
@@ -96,8 +104,8 @@ var backboneModel_SubtitleField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abTRACKba',this.get('trackNumber'));
 		bat = __replace(bat, 'abTITLEba',this.get('title'));
 		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
-		bat = __replace(bat, 'abDEFAULTba',this.get('defaultTrack'));
-		bat = __replace(bat, 'abFORCEDba',this.get('forcedTrack'));
+		bat = __replace(bat, 'abDEFAULTba',this.get('default'));
+		bat = __replace(bat, 'abFORCEDba',this.get('forced'));
 
 		this.set({batch:bat});
 	}
@@ -142,8 +150,13 @@ var backboneView_Fields = Backbone.View.extend({
 		this.listenTo(this.collection, 'change', this.render());
 		this.render();
 	},
+	focusModel: {},
 	events: {
-		'keyup .listener-textbox':'textboxChanged'
+		'keyup .listener-textbox':'titleChanged',
+		'change .listener-ddLanguage':'languageChanged',
+		'change .listener-ddDefault':'defaultChanged',
+		'change .listener-ddForced':'forcedChanged',
+		'focus .listener-textbox,.listener-ddLanguage,.listener-ddDefault,.listener-ddForced':'gainedFocus'
 	},
 	render: function() {
 		var html = '';
@@ -152,57 +165,66 @@ var backboneView_Fields = Backbone.View.extend({
 			if (curModel.get('type') === 'video') {
 				html += temp_Video({
 					uid: curModel.get('uid'),
-					textbox: {item:temp_Textbox, variables:{ title:'VIDEO', className:'video' }},
-					ddDefault: {item:temp_DDDefault},
-					ddLanguage: {item:temp_DDLanguage}
+					textbox: {item:temp_Textbox, variables:{ label:'VIDEO', className:'video', modelTitle:curModel.get('title') }},
+					ddDefault: {item:temp_DDDefault, variables:{ options: createDropdownOptions(ddDefaultContents, curModel.get('default')) }},
+					ddLanguage: {item:temp_DDLanguage, variables:{ options:createDropdownOptions(ddLanguageContents, curModel.get('language')) }}
 				});
 			}
 			else if (curModel.get('type') === 'audio') {
 				html += temp_Audio({
 					uid: curModel.get('uid'),
-					textbox: {item:temp_Textbox, variables:{ title:'AUDIO', className:'audio' }},
-					ddDefault: {item:temp_DDDefault},
-					ddLanguage: {item:temp_DDLanguage}
+					textbox: {item:temp_Textbox, variables:{ label:'AUDIO', className:'audio', modelTitle:curModel.get('title') }},
+					ddDefault: {item:temp_DDDefault, variables:{ options: createDropdownOptions(ddDefaultContents, curModel.get('default')) }},
+					ddLanguage: {item:temp_DDLanguage, variables:{ options:createDropdownOptions(ddLanguageContents, curModel.get('language')) }}
 				});
 			}
 			else if (curModel.get('type') === 'subtitle') {
 				html += temp_Subtitle({
 					uid: curModel.get('uid'),
-					textbox: {item:temp_Textbox, variables:{ title:'SUBTITLE', className:'subtitle' }},
-					ddDefault: {item:temp_DDDefault},
-					ddLanguage: {item:temp_DDLanguage},
-					ddForced: {item:temp_DDForced}
+					textbox: {item:temp_Textbox, variables:{ label:'SUBTITLE', className:'subtitle', modelTitle:curModel.get('title') }},
+					ddDefault: {item:temp_DDDefault, variables:{ options: createDropdownOptions(ddDefaultContents, curModel.get('default')) }},
+					ddLanguage: {item:temp_DDLanguage, variables:{ options:createDropdownOptions(ddLanguageContents, curModel.get('language')) }},
+					ddForced: {item:temp_DDForced, variables:{ options:createDropdownOptions(ddForcedContents, curModel.get('forced')) }}
 				});
 			}
 		}
 		this.$el.html(html);
-		this.updateBatchText();
+		updateBatchText(this.collection);
 	},
-	textboxChanged: function(e) {
-		console.log($(e.currentTarget).parent().parent().attr('data-uid'));
+	//Update the model when the user types.
+	titleChanged: function(e) {
+		var text = $(e.currentTarget).val();
+		this.focusModel.set('title', text);
+		updateBatchText(this.collection);
 	},
-	updateBatchText: function() {
-		var batchScript = '';
+	languageChanged: function(e) {
+		var selected = $(e.currentTarget).val();
+		this.focusModel.set('language', selected);
+		updateBatchText(this.collection);
+	},
+	defaultChanged: function(e) {
+		var selected = $(e.currentTarget).val();
+		this.focusModel.set('default', selected);
+		updateBatchText(this.collection);
+	},
+	forcedChanged: function(e) {
+		var selected = $(e.currentTarget).val();
+		this.focusModel.set('forced', selected);
+		updateBatchText(this.collection);
+	},
+	//Everytime the user selects a new input field, set the local variable to represent the model.
+	//Saves resources instead of searching for the model every key press the user makes.
+	gainedFocus: function(e) {
+		this.focusModel = 'fill';
+		var uid = $(e.currentTarget).parent().parent().attr('data-uid');
 		for (var i = 0; i < this.collection.length; i++) {
 			var curModel = this.collection.models[i];
-			batchScript += curModel.get('batch');
+			if (curModel.get('uid') === uid) {
+				this.focusModel = curModel;
+				break;
+			}
 		}
-		$('#downloadText').text(batchScript);
 	}
 });
 
 var view = new backboneView_Fields({collection:collection});
-
-
-
-
-
-
-
-/*
-$('body').append(template_human({
-  hea: {item:template_header, variables:{eyes:'green',headGear:'top hat', penis:'cheese'}},
-  body: template_body,
-  foot: template_footer
-}));
-*/

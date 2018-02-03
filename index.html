@@ -174,9 +174,13 @@
 				</div>
 			</div>
 
-			<div id='userEntryFields'>
-
+			<div class='field'>
+				<div class='container-textbox'>
+					<input id='batchFileTitle' type='text' class='file' />
+					<label>FILE TITLE</label>
+				</div>
 			</div>
+			<div id='userEntryFields'></div>
 
 			<div class='download-area'>
 				<div class='button-area'>
@@ -197,35 +201,28 @@
 		<!--SCRIPT TAGS AND TEMPLATES-->
 		<script type='text/template' id='Textbox-template'>
 			<div class='container-textbox'>
-				<input type='text' class="listener-textbox <%= variables.className %>" />
-				<label><%= variables.title %></label>
+				<input type='text' class="listener-textbox <%= variables['className'] %>" value="<%= variables['modelTitle'] %>" />
+				<label><%= variables['label'] %></label>
 			</div>
 		</script>
 		<script type='text/template' id='DropdownLanguage-template'>
 			<div class='container-dropdown'>
-				<select>
-					<option value='und'>Undefined</option>
-					<option value='eng'>English</option>
-					<option value='jap'>Japanese</option>
-					<option value='fre'>French</option>
-					<option value='ger'>German</option>
-					<option value='spa'>Spanish</option>
+				<select class='listener-ddLanguage'>
+					<%= variables['options'] %>
 				</select>
 			</div>
 		</script>
 		<script type='text/template' id='DropdownDefault-template'>
 			<div class='container-dropdown'>
-				<select>
-					<option value='yes'>Yes</option>
-					<option value='no'>No</option>
+				<select class='listener-ddDefault'>
+					<%= variables['options'] %>
 				</select>
 			</div>
 		</script>
 		<script type='text/template' id='DropdownForced-template'>
 			<div class='container-dropdown'>
-				<select>
-					<option value='yes'>Yes</option>
-					<option value='no'>No</option>
+				<select class='listener-ddForced'>
+					<%= variables['options'] %>
 				</select>
 			</div>
 		</script>
@@ -263,26 +260,6 @@
 		<script src='js/libs/popper.js'></script>
 		<script src='js/libs/blob.js'></script>
 		<script src='js/libs/filesaver.js'></script>
-
-		<!-- PAGE SCRIPTS -->
-		<script>
-			$(document).ready(function() {
-				$('#addTrackVideo').click(function() {
-					var new_video = new backboneModel_VideoField();
-					collection.add(new_video);
-					view.render();
-				});
-				$('#addTrackAudio').click(function() {
-					var new_audio = new backboneModel_AudioField();
-					collection.add(new_audio);
-					view.render();
-				});
-				$('#addTrackSubtitle').click(function() {
-					var new_subtitle = new backboneModel_SubtitleField();
-					collection.add(new_subtitle);
-					view.render();
-				});
-			});
-		</script>
+		<script src='js/scripts/events.js'></script>
 	</body>
 </html>
