@@ -8,6 +8,7 @@ $color_scheme_disabled: #808080;
 $color_scheme_button_hover: #d9d9d9;
 $color_scheme_dark_blue: #18206F;
 $color_scheme_light_blue: #26547C;
+$color_scheme_dark_black: #36454f;
 
 $border_radius_button: 5px;
 $border_radius_field: 3px;
@@ -22,6 +23,21 @@ $border_radius_field: 3px;
 /*
 	STYLES FOR INPUT FIELDS
 */
+.info-circle {
+	display: inline-block;
+	text-align: center;
+	vertical-align: top;
+	margin-left: 5px;
+	border-radius: 50%;
+	width: 15px;
+	height: 15px;
+	font-size: 0.9em;
+	font-weight: bolder;
+	background-color: $color_scheme_button_hover;
+	&:hover {
+		cursor: pointer;
+	}
+}
 .field {
 	display: block;
 	margin: 5px 0;
@@ -128,6 +144,25 @@ $border_radius_field: 3px;
 		margin-left: 8px;
 		line-height: 15px;
 	}
+}
+.container-delete-track {
+	height: 40px;
+	width: 40px;
+	text-align: center;
+	vertical-align: top;
+	margin-top: 15px;
+	background-color: $color_scheme_dark_black;
+	border-radius: $border_radius_field;
+	img {
+		padding-top: 2.5px;
+		height: 35px;
+	}
+	&:hover {
+		cursor: pointer;
+	}
+}
+.container-remove-track {
+
 }
 
 

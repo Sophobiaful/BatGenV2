@@ -74,6 +74,15 @@ call %mkvmerge% -o "%output_folder%\\%ep%.mkv"';
 		batchScript += ' ' + curModel.get('batch');
 	}
 
+	if (removeVideo) {
+		batchScript += ' --no-video';
+	}
+	if (removeAudio) {
+		batchScript += ' --no-audio';
+	}
+	if (removeSubtitle) {
+		batchScript += ' --no-subtitle';
+	}
 
 	batchScript += ' "%fi%" ';
 	if (sentCollection.length > 0) {

@@ -4,15 +4,12 @@ $(document).ready(function() {
 	$('#addTrackSubtitle').click(function() {	updateViewAndInfo(view, collection, new backboneModel_SubtitleField()); });
 
 
-	$('#batchFileTitle').keyup(function() {
-		updateBatchText(view['collection']);
-	});
-	$('#batchMKVLocation').keyup(function() {
+	$('#batchFileTitle,#batchMKVLocation').keyup(function() {
 		updateBatchText(view['collection']);
 	});
 
 
-	$('#batchCounter').change(function() {
+	$('#batchCounter').keyup(function() {
 		updateBatchText(view['collection']);
 	});
 
@@ -33,15 +30,23 @@ $(document).ready(function() {
 		updateBatchText(view['collection']);
 	});
 
-
-	$('#batchRemoveVideo').change(function() {
-		updateBatchText(view['collection']);
-	});
-	$('#batchRemoveAudio').change(function() {
-		updateBatchText(view['collection']);
-	});
-	$('#batchRemoveSubtitle').change(function() {
+	$('#batchRemoveVideo,#batchRemoveAudio,#batchRemoveSubtitle').change(function() {
 		updateBatchText(view['collection']);
 	});
 
+	$('#buttonDownload').click(function() {
+		var blob = new Blob([$('#downloadText').val()], {type: "text/plain;charset=utf-8"});
+		saveAs(blob, "batgen.bat");
+	});
+	$('#buttonCopy').click(function() {
+		$('#downloadText').prop('disabled', false);
+		$('#downloadText').select();
+		document.execCommand('copy');
+		$('#downloadText').prop('disabled', true);
+	});
+
+	new Tooltip($('#infoRemoveTracks'), {
+		placement: 'top',
+		title: 'Removing all tracks causes an error. Make sure there will be at least one track left in the file once remuxing is complete.'
+	});
 });

@@ -15,6 +15,7 @@
 		<link rel='stylesheet' type='text/css' href='stylesheets/css/style.css' />
 		<link rel='stylesheet' type='text/css' href='stylesheets/css/animate.css' />
 		<link rel='stylesheet' type='text/css' href='stylesheets/css/checkboxes.css' />
+		<link rel='stylesheet' type='text/css' href='stylesheets/css/popper.css' />
 	</head>
 	<body>
 		<noscript>
@@ -149,7 +150,7 @@
 				   </div>
 				</div>
 				<div class='remove-tracks-area'>
-					<span>Remove ALL Tracks</span>
+					<span>Remove ALL Tracks<span id='infoRemoveTracks' class='info-circle no-select'>!</span></span>
 					<div class='no-select container-checkbox'>
 	 					  <input type='checkbox' id='batchRemoveVideo' name='batchRemoveVideo' />
 	 					  <label for='batchRemoveVideo' class='check-box'></label>
@@ -179,12 +180,19 @@
 					<input id='batchFileTitle' type='text' class='file' />
 					<label>FILE TITLE</label>
 				</div>
+				<div class='container-delete-track'>
+					<img src='images/skull2_small.png' />
+				</div>
+
+				<!--<div class='container-remove-track'>
+					<img src='images/cross_small.png' />
+				</div>-->
 			</div>
 			<div id='userEntryFields'></div>
 
 			<div class='download-area'>
 				<div class='button-area'>
-					<div class='button left font-dosis no-select'>DOWNLOAD</div><div class='button right font-dosis no-select'>COPY TEXT</div>
+					<div id='buttonDownload' class='button left font-dosis no-select'>DOWNLOAD</div><div id='buttonCopy' class='button right font-dosis no-select'>COPY TEXT</div>
 				</div>
 				<textarea id='downloadText' spellcheck='false' disabled></textarea>
 			</div>
@@ -258,6 +266,7 @@
 		<script src='js/libs/mousetrap.js'></script>
 		<script src='js/libs/sortable.js'></script>
 		<script src='js/libs/popper.js'></script>
+		<script src='js/libs/tooltip.js'></script>
 		<script src='js/libs/blob.js'></script>
 		<script src='js/libs/filesaver.js'></script>
 		<script src='js/scripts/events.js'></script>
