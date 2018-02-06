@@ -1,7 +1,26 @@
 $(document).ready(function() {
-	$('#addTrackVideo').click(function() { updateViewAndInfo(view, collection, new backboneModel_VideoField()); });
-	$('#addTrackAudio').click(function() {	updateViewAndInfo(view, collection, new backboneModel_AudioField()); });
-	$('#addTrackSubtitle').click(function() {	updateViewAndInfo(view, collection, new backboneModel_SubtitleField()); });
+	$('#addTrackVideo').click(function() {
+		updateViewAndInfo(view, collection, new backboneModel_VideoField());
+	});
+	$('#addTrackAudio').click(function() {
+		updateViewAndInfo(view, collection, new backboneModel_AudioField());
+	});
+	$('#addTrackSubtitle').click(function() {
+		updateViewAndInfo(view, collection, new backboneModel_SubtitleField());
+	});
+
+
+
+	//Hotkeys.
+	Mousetrap.bind('alt+1', function() {
+		$('#addTrackVideo').click();
+	});
+	Mousetrap.bind('alt+2', function() {
+		$('#addTrackAudio').click();
+	});
+	Mousetrap.bind('alt+3', function() {
+		$('#addTrackSubtitle').click();
+	});
 
 
 	$('#batchFileTitle,#batchMKVLocation').keyup(function() {

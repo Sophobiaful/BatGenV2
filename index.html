@@ -180,15 +180,9 @@
 					<input id='batchFileTitle' type='text' class='file' />
 					<label>FILE TITLE</label>
 				</div>
-				<div class='container-delete-track'>
-					<img src='images/skull2_small.png' />
-				</div>
-
-				<!--<div class='container-remove-track'>
-					<img src='images/cross_small.png' />
-				</div>-->
 			</div>
 			<div id='userEntryFields'></div>
+
 
 			<div class='download-area'>
 				<div class='button-area'>
@@ -234,12 +228,22 @@
 				</select>
 			</div>
 		</script>
+		<script type='text/template' id='Buttons-template'>
+			<div class='container-delete-track listener-deleteTrack'>
+				<img src='images/skull2_small.png' />
+			</div>
+			<div class='container-remove-track listener-removeTrack'>
+				<img src='images/cross2_small.png' />
+			</div>
+		</script>
 
 		<script type='text/template' id='VideoField-template'>
 			<div class='field' data-uid="<%= uid %>">
 				<%= textbox.item(textbox) %>
 				<%= ddDefault.item(ddDefault) %>
 				<%= ddLanguage.item(ddLanguage) %>
+				<div class='spacer-dropdown forced'></div>
+				<%= buttons.item(buttons) %>
 			</div>
 		</script>
 		<script type='text/template' id='AudioField-template'>
@@ -247,6 +251,8 @@
 				<%= textbox.item(textbox) %>
 				<%= ddDefault.item(ddDefault) %>
 				<%= ddLanguage.item(ddLanguage) %>
+				<div class='spacer-dropdown forced'></div>
+				<%= buttons.item(buttons) %>
 			</div>
 		</script>
 		<script type='text/template' id='SubtitleField-template'>
@@ -255,16 +261,18 @@
 				<%= ddDefault.item(ddDefault) %>
 				<%= ddLanguage.item(ddLanguage) %>
 				<%= ddForced.item(ddForced) %>
+				<%= buttons.item(buttons) %>
 			</div>
 		</script>
 
 		<script src='js/libs/jquery.js'></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script src='js/scripts/functions.js'></script>
+		<script src='js/libs/sortable.js'></script>
 		<script src='js/libs/underscore.js'></script>
 		<script src='js/libs/backbone.js'></script>
 		<script src='js/backbone/backbone.js'></script>
 		<script src='js/libs/mousetrap.js'></script>
-		<script src='js/libs/sortable.js'></script>
 		<script src='js/libs/popper.js'></script>
 		<script src='js/libs/tooltip.js'></script>
 		<script src='js/libs/blob.js'></script>

@@ -5,6 +5,7 @@ var temp_Textbox = _.template($('#Textbox-template').html());
 var temp_DDLanguage = _.template($('#DropdownLanguage-template').html());
 var temp_DDDefault = _.template($('#DropdownDefault-template').html());
 var temp_DDForced = _.template($('#DropdownForced-template').html());
+var temp_Buttons = _.template($('#Buttons-template').html());
 
 var temp_Video = _.template($('#VideoField-template').html());
 var temp_Audio = _.template($('#AudioField-template').html());
@@ -14,7 +15,7 @@ var temp_Subtitle = _.template($('#SubtitleField-template').html());
 /*
 	Variables
 */
-var ddLanguageContents = [['und','Undefined'], ['eng','English'], ['jap','Japanese'], ['fre','French'], ['ger','German'], ['spa','Spanish']];
+var ddLanguageContents = [['und','Undefined'], ['eng','English'], ['jpn','Japanese'], ['fre','French'], ['ger','German'], ['spa','Spanish'], ['ita','Italian']];
 var ddDefaultContents = [['yes','Yes'], ['no','No']];
 var ddForcedContents = [['yes','Yes'], ['no','No']];
 
@@ -41,6 +42,7 @@ var backboneModel_VideoField = backboneModel_Field.extend({
 		uid: 0,
 		type: 'video',
 		trackNumber: 0,
+		sortedTrackNumber: 0,
 		title: '',
 		language: 'und',
 		default: 'yes',
@@ -67,6 +69,7 @@ var backboneModel_AudioField = backboneModel_Field.extend({
 		uid: 0,
 		type: 'audio',
 		trackNumber: 0,
+		sortedTrackNumber: 0,
 		title: '',
 		language: 'und',
 		default: 'yes',
@@ -93,6 +96,7 @@ var backboneModel_SubtitleField = backboneModel_Field.extend({
 		uid: 0,
 		type: 'subtitle',
 		trackNumber: 0,
+		sortedTrackNumber: 0,
 		title: '',
 		language: 'und',
 		default: 'yes',
@@ -127,19 +131,32 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 			model.constructBatch();
 		});
 	},
+	reOrderSortedTrackOrder: function(order) {
+		if (this.length === order.length) {
+			for (var i = 0; i < this.length; i++) {
+				var currentModel = this.models[i];
+				currentModel.set('sortedTrackNumber', order[i]);
+				currentModel.constructBatch();
+			}
+		}
+		else {
+			alert('ERROR WITH COLLECTION.');
+		}
+	},
 	printTrackOrder: function() {
 		var order = '';
 		for (var i = 0; i < this.length; i++) {
-			order += '0:' + this.models[i].get('trackNumber') + ',';
+			order += '0:' + this.models[i].get('sortedTrackNumber') + ',';
 		}
 		order = order.slice(0,-1);
 		return order;
 	},
 	reOrderTrackNumbers: function() {
 		for (var i = 0; i < this.length; i++) {
-			currentModel = this.models[i];
+			var currentModel = this.models[i];
 
 			currentModel.set('trackNumber', i);
+			currentModel.set('sortedTrackNumber', i);
 			currentModel.constructBatch();
 		}
 	}
@@ -163,18 +180,23 @@ var backboneView_Fields = Backbone.View.extend({
 		'change .listener-ddLanguage':'languageChanged',
 		'change .listener-ddDefault':'defaultChanged',
 		'change .listener-ddForced':'forcedChanged',
-		'focus .listener-textbox,.listener-ddLanguage,.listener-ddDefault,.listener-ddForced':'gainedFocus'
+		'focus .listener-textbox,.listener-ddLanguage,.listener-ddDefault,.listener-ddForced':'gainedFocus',
+		'click .listener-deleteTrack':'setDeleteTrack',
+		'click .listener-removeTrack':'removeTrack'
 	},
 	render: function() {
 		var html = '';
+		var numbers = '';
 		for (var i = 0; i < this.collection.length; i++) {
 			var curModel = this.collection.models[i];
+			numbers += '<div class="no-select" data-track="' + i + '">' + (i + 1) + '</div> ';
 			if (curModel.get('type') === 'video') {
 				html += temp_Video({
 					uid: curModel.get('uid'),
 					textbox: {item:temp_Textbox, variables:{ label:'VIDEO', className:'video', modelTitle:curModel.get('title') }},
 					ddDefault: {item:temp_DDDefault, variables:{ options: createDropdownOptions(ddDefaultContents, curModel.get('default')) }},
-					ddLanguage: {item:temp_DDLanguage, variables:{ options:createDropdownOptions(ddLanguageContents, curModel.get('language')) }}
+					ddLanguage: {item:temp_DDLanguage, variables:{ options:createDropdownOptions(ddLanguageContents, curModel.get('language')) }},
+					buttons: {item:temp_Buttons}
 				});
 			}
 			else if (curModel.get('type') === 'audio') {
@@ -182,7 +204,8 @@ var backboneView_Fields = Backbone.View.extend({
 					uid: curModel.get('uid'),
 					textbox: {item:temp_Textbox, variables:{ label:'AUDIO', className:'audio', modelTitle:curModel.get('title') }},
 					ddDefault: {item:temp_DDDefault, variables:{ options: createDropdownOptions(ddDefaultContents, curModel.get('default')) }},
-					ddLanguage: {item:temp_DDLanguage, variables:{ options:createDropdownOptions(ddLanguageContents, curModel.get('language')) }}
+					ddLanguage: {item:temp_DDLanguage, variables:{ options:createDropdownOptions(ddLanguageContents, curModel.get('language')) }},
+					buttons: {item:temp_Buttons}
 				});
 			}
 			else if (curModel.get('type') === 'subtitle') {
@@ -191,11 +214,21 @@ var backboneView_Fields = Backbone.View.extend({
 					textbox: {item:temp_Textbox, variables:{ label:'SUBTITLE', className:'subtitle', modelTitle:curModel.get('title') }},
 					ddDefault: {item:temp_DDDefault, variables:{ options: createDropdownOptions(ddDefaultContents, curModel.get('default')) }},
 					ddLanguage: {item:temp_DDLanguage, variables:{ options:createDropdownOptions(ddLanguageContents, curModel.get('language')) }},
-					ddForced: {item:temp_DDForced, variables:{ options:createDropdownOptions(ddForcedContents, curModel.get('forced')) }}
+					ddForced: {item:temp_DDForced, variables:{ options:createDropdownOptions(ddForcedContents, curModel.get('forced')) }},
+					buttons: {item:temp_Buttons}
 				});
 			}
+
 		}
+		html += '<div id="trackArrangeNumbers" class="container-arranged-numbers">' + numbers + '</div>';
 		this.$el.html(html);
+		var parent = this;
+		var sortable = Sortable.create(document.getElementById('trackArrangeNumbers'), {
+			onEnd: function() {
+				parent.arrangeNumbers();
+				updateBatchText(view['collection']);
+			}
+		});
 		updateBatchText(this.collection);
 	},
 	//Update the model when the user types.
@@ -219,6 +252,15 @@ var backboneView_Fields = Backbone.View.extend({
 		this.focusModel.set('forced', selected);
 		updateBatchText(this.collection);
 	},
+	//Changes the track order.
+	arrangeNumbers: function() {
+		var element = $('#trackArrangeNumbers');
+		var numberArray = [];
+		element.children('div').each(function() {
+			numberArray.push($(this).attr('data-track'));
+		});
+		this.collection.reOrderSortedTrackOrder(numberArray);
+	},
 	//Everytime the user selects a new input field, set the local variable to represent the model.
 	//Saves resources instead of searching for the model every key press the user makes.
 	gainedFocus: function(e) {
@@ -228,6 +270,21 @@ var backboneView_Fields = Backbone.View.extend({
 			var curModel = this.collection.models[i];
 			if (curModel.get('uid') === uid) {
 				this.focusModel = curModel;
+				break;
+			}
+		}
+	},
+	setDeleteTrack: function(e) {
+
+	},
+	//Watch this. Seems to work but I need to test still.
+	removeTrack: function(e) {
+		var uid = $(e.currentTarget).parent().attr('data-uid');
+		for (var i = 0; i < this.collection.length; i++) {
+			var curModel = this.collection.models[i];
+			if (curModel.get('uid') === uid) {
+				this.collection.remove(curModel);
+				this.render();
 				break;
 			}
 		}
