@@ -203,20 +203,20 @@
 		<!--SCRIPT TAGS AND TEMPLATES-->
 		<script type='text/template' id='Textbox-template'>
 			<div class='container-textbox'>
-				<input type='text' class="listener-textbox <%= variables['className'] %>" value="<%= variables['modelTitle'] %>" />
+				<input type='text' class="listener-textbox <%= variables['className'] %>" value="<%= variables['modelTitle'] %>" <%= variables['disabled'] %> />
 				<label><%= variables['label'] %></label>
 			</div>
 		</script>
 		<script type='text/template' id='DropdownLanguage-template'>
 			<div class='container-dropdown'>
-				<select class='listener-ddLanguage'>
+				<select class='listener-ddLanguage' <%= variables['disabled'] %>>
 					<%= variables['options'] %>
 				</select>
 			</div>
 		</script>
 		<script type='text/template' id='DropdownDefault-template'>
 			<div class='container-dropdown'>
-				<select class='listener-ddDefault'>
+				<select class='listener-ddDefault' <%= variables['disabled'] %>>
 					<%= variables['options'] %>
 				</select>
 			</div>

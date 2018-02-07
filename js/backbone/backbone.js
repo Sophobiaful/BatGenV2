@@ -29,7 +29,9 @@ var backboneModel_Field = Backbone.Model.extend({
 	defaults: {
 		batch: 'error:001-basemodel-default'
 	},
-	constructBatch: function() { }
+	constructBatch: function() { },
+	switchEnabled: function() { },
+	outputEnabled: function() { }
 });
 
 //A model used for each 'video' type track/field.
@@ -46,6 +48,7 @@ var backboneModel_VideoField = backboneModel_Field.extend({
 		title: '',
 		language: 'und',
 		default: 'yes',
+		enabled: true,
 		batch: 'error:002-video-default'
 	},
 	constructBatch: function() {
@@ -56,6 +59,22 @@ var backboneModel_VideoField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abDEFAULTba',this.get('default'));
 
 		this.set({batch:bat});
+	},
+	switchEnabled: function() {
+		if (this.enabled) {
+			this.set({enabled:false});
+		}
+		else {
+			this.set({enabled:true});
+		}
+	},
+	outputEnabled: function() {
+		if (this.enabled) {
+			return '';
+		}
+		else {
+			return 'disabled';
+		}
 	}
 });
 
@@ -73,6 +92,7 @@ var backboneModel_AudioField = backboneModel_Field.extend({
 		title: '',
 		language: 'und',
 		default: 'yes',
+		enabled: true,
 		batch: 'error:003-audio-default'
 	},
 	constructBatch: function() {
@@ -83,6 +103,22 @@ var backboneModel_AudioField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abDEFAULTba',this.get('default'));
 
 		this.set({batch:bat});
+	},
+	switchEnabled: function() {
+		if (this.enabled) {
+			this.set({enabled:false});
+		}
+		else {
+			this.set({enabled:true});
+		}
+	},
+	outputEnabled: function() {
+		if (this.enabled) {
+			return '';
+		}
+		else {
+			return 'disabled';
+		}
 	}
 });
 
@@ -101,6 +137,7 @@ var backboneModel_SubtitleField = backboneModel_Field.extend({
 		language: 'und',
 		default: 'yes',
 		forced: 'yes',
+		enabled: true,
 		batch: 'error:003-subtitle-default'
 	},
 	constructBatch: function() {
@@ -112,6 +149,22 @@ var backboneModel_SubtitleField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abFORCEDba',this.get('forced'));
 
 		this.set({batch:bat});
+	},
+	switchEnabled: function() {
+		if (this.enabled) {
+			this.set({enabled:false});
+		}
+		else {
+			this.set({enabled:true});
+		}
+	},
+	outputEnabled: function() {
+		if (this.enabled) {
+			return '';
+		}
+		else {
+			return 'disabled';
+		}
 	}
 });
 
@@ -141,6 +194,55 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 		}
 		else {
 			alert('ERROR WITH COLLECTION.');
+		}
+	},
+	printBatch: function() {
+		var removeVideo = false;
+		var removeAudio = false;
+		var removeSubtitle = false;
+
+		for (var i = 0; i < this.length; i++) {
+			var curModel = this.models[i];
+			if (curModel.get('enabled')) {
+				batchScript += ' ' + curModel.get('batch');
+			}
+			else {
+				if (curModel.get('type') === 'video') { removeVideo = true; }
+				if (curModel.get('type') === 'audio') { removeAudio = true; }
+				if (curModel.get('type') === 'subtitle') { removeSubtitle = true; }
+			}
+		}
+
+		//Need loops
+		if (removeVideo) {
+			batchScript += ' -d !';
+			for (var i = 0; i < this.length; i++) {
+				var curModel = this.models[i];
+				if (curModel.get('type') === 'video' && curModel.get('enabled') === false) {
+					batchScript += curModel.get('trackOrder') + ',';
+				}
+			}
+			batchScript = batchScript.slice(0,-1);
+		}
+		if (removeAudio) {
+			batchScript += ' -a !';
+			for (var i = 0; i < this.length; i++) {
+				var curModel = this.models[i];
+				if (curModel.get('type') === 'audio' && curModel.get('enabled') === false) {
+					batchScript += curModel.get('trackOrder') + ',';
+				}
+			}
+			batchScript = batchScript.slice(0,-1);
+		}
+		if (removeSubtitle) {
+			batchScript += ' -s !';
+			for (var i = 0; i < this.length; i++) {
+				var curModel = this.models[i];
+				if (curModel.get('type') === 'subtitle' && curModel.get('enabled') === false) {
+					batchScript += curModel.get('trackOrder') + ',';
+				}
+			}
+			batchScript = batchScript.slice(0,-1);
 		}
 	},
 	printTrackOrder: function() {
@@ -181,7 +283,7 @@ var backboneView_Fields = Backbone.View.extend({
 		'change .listener-ddDefault':'defaultChanged',
 		'change .listener-ddForced':'forcedChanged',
 		'focus .listener-textbox,.listener-ddLanguage,.listener-ddDefault,.listener-ddForced':'gainedFocus',
-		'click .listener-deleteTrack':'setDeleteTrack',
+		'click .listener-deleteTrack':'enableDeleteTrack',
 		'click .listener-removeTrack':'removeTrack'
 	},
 	render: function() {
@@ -193,28 +295,95 @@ var backboneView_Fields = Backbone.View.extend({
 			if (curModel.get('type') === 'video') {
 				html += temp_Video({
 					uid: curModel.get('uid'),
-					textbox: {item:temp_Textbox, variables:{ label:'VIDEO', className:'video', modelTitle:curModel.get('title') }},
-					ddDefault: {item:temp_DDDefault, variables:{ options: createDropdownOptions(ddDefaultContents, curModel.get('default')) }},
-					ddLanguage: {item:temp_DDLanguage, variables:{ options:createDropdownOptions(ddLanguageContents, curModel.get('language')) }},
-					buttons: {item:temp_Buttons}
+					textbox: {
+						item:temp_Textbox,
+						variables:{
+							label:'VIDEO',
+							className:'video',
+							modelTitle:curModel.get('title'),
+							disabled:curModel.outputEnabled()
+						 }
+					 },
+					ddDefault: {
+						item:temp_DDDefault,
+						variables:{
+							options: createDropdownOptions(ddDefaultContents, curModel.get('default')),
+							disabled:curModel.outputEnabled()
+						}
+					},
+					ddLanguage: {
+						item:temp_DDLanguage,
+						variables:{
+							options:createDropdownOptions(ddLanguageContents, curModel.get('language')),
+							disabled:curModel.outputEnabled()
+						}
+					},
+					buttons: {
+						item:temp_Buttons
+					}
 				});
 			}
 			else if (curModel.get('type') === 'audio') {
 				html += temp_Audio({
 					uid: curModel.get('uid'),
-					textbox: {item:temp_Textbox, variables:{ label:'AUDIO', className:'audio', modelTitle:curModel.get('title') }},
-					ddDefault: {item:temp_DDDefault, variables:{ options: createDropdownOptions(ddDefaultContents, curModel.get('default')) }},
-					ddLanguage: {item:temp_DDLanguage, variables:{ options:createDropdownOptions(ddLanguageContents, curModel.get('language')) }},
-					buttons: {item:temp_Buttons}
+					textbox: {
+						item:temp_Textbox,
+						variables:{
+							label:'AUDIO',
+							className:'audio',
+							modelTitle:curModel.get('title'),
+							disabled:curModel.outputEnabled()
+						}
+					},
+					ddDefault: {
+						item:temp_DDDefault,
+						variables:{
+							options: createDropdownOptions(ddDefaultContents, curModel.get('default')),
+							disabled:curModel.outputEnabled()
+						}
+					},
+					ddLanguage: {
+						item:temp_DDLanguage,
+						variables:{
+							options:createDropdownOptions(ddLanguageContents, curModel.get('language')),
+							disabled:curModel.outputEnabled()
+						}
+					},
+					buttons: {
+						item:temp_Buttons
+					}
 				});
 			}
 			else if (curModel.get('type') === 'subtitle') {
 				html += temp_Subtitle({
 					uid: curModel.get('uid'),
-					textbox: {item:temp_Textbox, variables:{ label:'SUBTITLE', className:'subtitle', modelTitle:curModel.get('title') }},
-					ddDefault: {item:temp_DDDefault, variables:{ options: createDropdownOptions(ddDefaultContents, curModel.get('default')) }},
-					ddLanguage: {item:temp_DDLanguage, variables:{ options:createDropdownOptions(ddLanguageContents, curModel.get('language')) }},
-					ddForced: {item:temp_DDForced, variables:{ options:createDropdownOptions(ddForcedContents, curModel.get('forced')) }},
+					textbox: {
+						item:temp_Textbox,
+						variables:{
+							label:'SUBTITLE',
+							className:'subtitle',
+							modelTitle:curModel.get('title'),
+							disabled:curModel.outputEnabled()
+						}
+					},
+					ddDefault: {
+						item:temp_DDDefault,
+						variables:{
+							options: createDropdownOptions(ddDefaultContents, curModel.get('default')),
+							disabled:curModel.outputEnabled()
+						}
+					},
+					ddLanguage: {
+						item:temp_DDLanguage,
+						variables:{
+							options:createDropdownOptions(ddLanguageContents, curModel.get('language')),
+							disabled:curModel.outputEnabled()
+						}
+					},
+					ddForced: {
+						item:temp_DDForced,
+						variables:{
+							options:createDropdownOptions(ddForcedContents, curModel.get('forced')), disabled:curModel.outputEnabled() }},
 					buttons: {item:temp_Buttons}
 				});
 			}
@@ -274,8 +443,17 @@ var backboneView_Fields = Backbone.View.extend({
 			}
 		}
 	},
-	setDeleteTrack: function(e) {
-
+	//Sets a model to be disabled. Disabled tracks will be deleted from the file.
+	enableDeleteTrack: function(e) {
+		var uid = $(e.currentTarget).parent().attr('data-uid');
+		for (var i = 0; i < this.collection.length; i++) {
+			var curModel = this.collection.models[i];
+			if (curModel.get('uid') === uid) {
+				curModel.switchEnabled();
+				this.render();
+				break;
+			}
+		}
 	},
 	//Watch this. Seems to work but I need to test still.
 	removeTrack: function(e) {
