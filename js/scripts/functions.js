@@ -69,7 +69,7 @@ for /F "tokens=1* delims=- " %%A in ("%ep%") do (\n\
 )\n\
 call %mkvmerge% -o "%output_folder%\\%ep%.mkv"';
 
-	batchScript += sentCollection.printBatch();
+	batchScript += sentCollection.printBatch(removeVideo, removeAudio, removeSubtitle);
 
 	if (removeVideo) {
 		batchScript += ' --no-video';

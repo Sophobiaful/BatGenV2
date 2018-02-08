@@ -152,18 +152,15 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 		});
 	},
 	reOrderSortedTrackOrder: function(order) {
-		if (this.length === order.length) {
-			for (var i = 0; i < this.length; i++) {
-				var currentModel = this.models[i];
-				currentModel.set('sortedTrackNumber', order[i]);
-				currentModel.constructBatch();
+		for (var i = 0; i < this.length; i++) {
+			var curModel = this.models[i];
+			if (curModel.get('enabled')) {
+				curModel.set('sortedTrackNumber', order[i]);
+				curModel.constructBatch();
 			}
 		}
-		else {
-			alert('ERROR WITH COLLECTION.');
-		}
 	},
-	printBatch: function() {
+	printBatch: function(deleteAllVideo, deleteAllAudio, deleteAllSubtitle) {
 		var removeVideo = false;
 		var removeAudio = false;
 		var removeSubtitle = false;
@@ -181,7 +178,7 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 			}
 		}
 
-		if (removeVideo) {
+		if (removeVideo && !deleteAllVideo) {
 			batchScript += ' -d !';
 			for (var i = 0; i < this.length; i++) {
 				var curModel = this.models[i];
@@ -191,7 +188,7 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 			}
 			batchScript = batchScript.slice(0,-1);
 		}
-		if (removeAudio) {
+		if (removeAudio && !deleteAllAudio) {
 			batchScript += ' -a !';
 			for (var i = 0; i < this.length; i++) {
 				var curModel = this.models[i];
@@ -201,7 +198,7 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 			}
 			batchScript = batchScript.slice(0,-1);
 		}
-		if (removeSubtitle) {
+		if (removeSubtitle && !deleteAllSubtitle) {
 			batchScript += ' -s !';
 			for (var i = 0; i < this.length; i++) {
 				var curModel = this.models[i];
@@ -216,7 +213,9 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 	printTrackOrder: function() {
 		var order = '';
 		for (var i = 0; i < this.length; i++) {
-			order += '0:' + this.models[i].get('sortedTrackNumber') + ',';
+			if (this.models[i].get('enabled')) {
+				order += '0:' + this.models[i].get('sortedTrackNumber') + ',';
+			}
 		}
 		order = order.slice(0,-1);
 		return order;
@@ -259,7 +258,12 @@ var backboneView_Fields = Backbone.View.extend({
 		var numbers = '';
 		for (var i = 0; i < this.collection.length; i++) {
 			var curModel = this.collection.models[i];
-			numbers += '<div class="no-select" data-track="' + i + '">' + (i + 1) + '</div> ';
+			if (curModel.get('enabled')) {
+				numbers += '<div class="no-select" data-track="' + curModel.get('trackNumber') + '">' + (curModel.get('trackNumber') + 1) + '</div> ';
+			}
+			else {
+				numbers += '<div class="hidden" data-track="' + curModel.get('trackNumber') + '">' + (curModel.get('trackNumber') + 1) + '</div> ';
+			}
 			if (curModel.get('type') === 'video') {
 				html += temp_Video({
 					uid: curModel.get('uid'),
