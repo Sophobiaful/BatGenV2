@@ -27,11 +27,26 @@ var ddForcedContents = [['yes','Yes'], ['no','No']];
 var backboneModel_Field = Backbone.Model.extend({
 	initialize: function() { },
 	defaults: {
-		batch: 'error:001-basemodel-default'
+		batch: 'error:001-basemodel-default',
+		enabled: true
 	},
 	constructBatch: function() { },
-	switchEnabled: function() { },
-	outputEnabled: function() { }
+	switchEnabled: function() {
+		if (this.get('enabled')) {
+			this.set({enabled:false});
+		}
+		else {
+			this.set({enabled:true});
+		}
+	},
+	outputEnabled: function() {
+		if (this.get('enabled')) {
+			return '';
+		}
+		else {
+			return 'disabled';
+		}
+	}
 });
 
 //A model used for each 'video' type track/field.
@@ -59,22 +74,6 @@ var backboneModel_VideoField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abDEFAULTba',this.get('default'));
 
 		this.set({batch:bat});
-	},
-	switchEnabled: function() {
-		if (this.enabled) {
-			this.set({enabled:false});
-		}
-		else {
-			this.set({enabled:true});
-		}
-	},
-	outputEnabled: function() {
-		if (this.enabled) {
-			return '';
-		}
-		else {
-			return 'disabled';
-		}
 	}
 });
 
@@ -103,22 +102,6 @@ var backboneModel_AudioField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abDEFAULTba',this.get('default'));
 
 		this.set({batch:bat});
-	},
-	switchEnabled: function() {
-		if (this.enabled) {
-			this.set({enabled:false});
-		}
-		else {
-			this.set({enabled:true});
-		}
-	},
-	outputEnabled: function() {
-		if (this.enabled) {
-			return '';
-		}
-		else {
-			return 'disabled';
-		}
 	}
 });
 
@@ -149,22 +132,6 @@ var backboneModel_SubtitleField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abFORCEDba',this.get('forced'));
 
 		this.set({batch:bat});
-	},
-	switchEnabled: function() {
-		if (this.enabled) {
-			this.set({enabled:false});
-		}
-		else {
-			this.set({enabled:true});
-		}
-	},
-	outputEnabled: function() {
-		if (this.enabled) {
-			return '';
-		}
-		else {
-			return 'disabled';
-		}
 	}
 });
 
@@ -200,6 +167,7 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 		var removeVideo = false;
 		var removeAudio = false;
 		var removeSubtitle = false;
+		var batchScript = '';
 
 		for (var i = 0; i < this.length; i++) {
 			var curModel = this.models[i];
@@ -213,13 +181,12 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 			}
 		}
 
-		//Need loops
 		if (removeVideo) {
 			batchScript += ' -d !';
 			for (var i = 0; i < this.length; i++) {
 				var curModel = this.models[i];
 				if (curModel.get('type') === 'video' && curModel.get('enabled') === false) {
-					batchScript += curModel.get('trackOrder') + ',';
+					batchScript += curModel.get('trackNumber') + ',';
 				}
 			}
 			batchScript = batchScript.slice(0,-1);
@@ -229,7 +196,7 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 			for (var i = 0; i < this.length; i++) {
 				var curModel = this.models[i];
 				if (curModel.get('type') === 'audio' && curModel.get('enabled') === false) {
-					batchScript += curModel.get('trackOrder') + ',';
+					batchScript += curModel.get('trackNumber') + ',';
 				}
 			}
 			batchScript = batchScript.slice(0,-1);
@@ -239,11 +206,12 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 			for (var i = 0; i < this.length; i++) {
 				var curModel = this.models[i];
 				if (curModel.get('type') === 'subtitle' && curModel.get('enabled') === false) {
-					batchScript += curModel.get('trackOrder') + ',';
+					batchScript += curModel.get('trackNumber') + ',';
 				}
 			}
 			batchScript = batchScript.slice(0,-1);
 		}
+		return batchScript;
 	},
 	printTrackOrder: function() {
 		var order = '';

@@ -69,10 +69,7 @@ for /F "tokens=1* delims=- " %%A in ("%ep%") do (\n\
 )\n\
 call %mkvmerge% -o "%output_folder%\\%ep%.mkv"';
 
-	for (var i = 0; i < sentCollection.length; i++) {
-		var curModel = sentCollection.models[i];
-		batchScript += ' ' + curModel.get('batch');
-	}
+	batchScript += sentCollection.printBatch();
 
 	if (removeVideo) {
 		batchScript += ' --no-video';
