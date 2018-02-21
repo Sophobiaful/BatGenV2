@@ -78,7 +78,7 @@ call %mkvmerge% -o "%output_folder%\\%ep%.mkv"';
 		batchScript += ' --no-audio';
 	}
 	if (removeSubtitle) {
-		batchScript += ' --no-subtitle';
+		batchScript += ' --no-subtitles';
 	}
 
 	batchScript += ' "%fi%" ';
