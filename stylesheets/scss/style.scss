@@ -347,6 +347,7 @@ $border_radius_field: 3px;
 .header {
 	color: #F3F4F5;
 	background-color: $color_scheme_dark_blue;
+	background-image: url('../../images/stars.png'), url('../../images/stars2.png');
 	box-shadow: -0.5px 5px 2px rgba(0, 0, 0, 0.75);
 	padding: 20px 40px;
 	margin-bottom: 5px;
@@ -380,6 +381,13 @@ $border_radius_field: 3px;
 	text-align: left;
 	padding: 45px 5%;
 	margin-top: 3px;
+
+	&:hover {
+		background-image: url('../../images/anime_roll.png');
+		background-size: 200px;
+		background-position: right;
+		background-repeat: no-repeat;
+	}
 }
 /*
 	END #591.23
