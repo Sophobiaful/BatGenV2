@@ -50,7 +50,7 @@ $(document).ready(function() {
 	});
 
 	$('#batchRemoveVideo,#batchRemoveAudio,#batchRemoveSubtitle').change(function() {
-		updateBatchText(view['collection']);
+		updatePropFlag(view['collection']);
 	});
 
 	$('#buttonDownload').click(function() {

@@ -2,6 +2,39 @@ function __replace(original, to_replace, with_replace) {
 	var word = original.replace(new RegExp(to_replace,'g'), with_replace);
 	return word;
 }
+function __changeYesNo(original) {
+	if (original === 'yes') {
+		return 1;
+	}
+	else if (original === 'no') {
+		return 0;
+	}
+	else {
+		return 0;
+	}
+}
+
+function updatePropFlag(sentCollection) {
+	var removeVideo = $('#batchRemoveVideo').is(':checked');
+	var removeAudio = $('#batchRemoveAudio').is(':checked');
+	var removeSubtitle = $('#batchRemoveSubtitle').is(':checked');
+
+	propFlag = true;
+	
+	//Checks to see if removing any types of tracks.
+	if (removeVideo || removeAudio || removeSubtitle) {
+		propFlag = false;
+	}
+	//Checks to see if any tracks are disabled.
+	if (sentCollection.checkIfDisabled()) {
+		propFlag = false;
+	}
+	//Checks to see if any tracks are out of order.
+	if (sentCollection.checkIfOutOfORder()) {
+		propFlag = false;
+	}
+	updateBatchText(sentCollection);
+}
 
 function guid() {
 	function s4() {
@@ -45,9 +78,12 @@ function updateBatchText(sentCollection) {
 
 
 	var batchScript = '';
-
+	
+	if (propFlag) { mkvLocation = mkvLocation + 'mkvpropedit.exe'; } else { mkvLocation = mkvLocation + 'mkvmerge.exe';  }
+	
+	
 	batchScript += 'setlocal DisableDelayedExpansion\n\
-set mkvmerge="' + mkvLocation + '"\n\
+set mkvexe="' + mkvLocation + '"\n\
 set "output_folder=%cd%\\Muxing"\n\
 set counter=' + counter + '\n\
 set ep_thousands=999\n\
@@ -66,10 +102,16 @@ for /F "tokens=1* delims=- " %%A in ("%ep%") do (\n\
 		set "ep_seas=%%C"\n\
 		set "ep_num=%%D"\n\
 	)\n\
-)\n\
-call %mkvmerge% -o "%output_folder%\\%ep%.mkv"';
-
-	batchScript += sentCollection.printBatch(removeVideo, removeAudio, removeSubtitle);
+)\n'
+	if (propFlag) {
+		batchScript += 'call %mkvexe% "%fi%"';
+	}
+	else {
+		batchScript += 'call %mkvexe% -o "%output_folder%\\%ep%.mkv"';
+	}
+	
+	//Adds the batch for each track.
+	if (propFlag) { batchScript += sentCollection.printPropBatch(); } else { batchScript += sentCollection.printBatch(); }
 
 	if (removeVideo) {
 		batchScript += ' --no-video';
@@ -81,12 +123,17 @@ call %mkvmerge% -o "%output_folder%\\%ep%.mkv"';
 		batchScript += ' --no-subtitles';
 	}
 
-	batchScript += ' "%fi%" ';
-	if (sentCollection.length > 0) {
-		batchScript += '--track-order ' + sentCollection.printTrackOrder() + ' ';
+	if (propFlag) {
+		batchScript += ' --edit info --set "title=' + fileTitle + '"\n';
 	}
-	batchScript += '--title "' + fileTitle + '"\n\
-set /a counter=10000%counter% %% 10000\n\
+	else {
+		batchScript += ' "%fi%" ';
+		if (sentCollection.length > 0) {
+			batchScript += '--track-order ' + sentCollection.printTrackOrder() + ' ';
+		}
+		batchScript += '--title "' + fileTitle + '"\n';
+	}
+	batchScript += 'set /a counter=10000%counter% %% 10000\n\
 set /a "counter=%counter%+1"\n';
 
 	if (counter1000) {

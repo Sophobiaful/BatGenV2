@@ -13,11 +13,16 @@ var temp_Subtitle = _.template($('#SubtitleField-template').html());
 
 
 /*
-	Variables
+	Variables For Data Entry Forms
 */
 var ddLanguageContents = [['und','Undefined'], ['eng','English'], ['jpn','Japanese'], ['fre','French'], ['ger','German'], ['spa','Spanish'], ['ita','Italian'],['pol','Polish'],['por','Portuguese']];
 var ddDefaultContents = [['yes','Yes'], ['no','No']];
 var ddForcedContents = [['yes','Yes'], ['no','No']];
+
+/*
+	Variables For Checks
+*/
+var propFlag = true;
 
 
 /*
@@ -28,9 +33,11 @@ var backboneModel_Field = Backbone.Model.extend({
 	initialize: function() { },
 	defaults: {
 		batch: 'error:001-basemodel-default',
+		propBatch: 'error:002-basemodel-default',
 		enabled: true
 	},
 	constructBatch: function() { },
+	constructPropBatch: function() { },
 	switchEnabled: function() {
 		if (this.get('enabled')) {
 			this.set({enabled:false});
@@ -54,6 +61,7 @@ var backboneModel_VideoField = backboneModel_Field.extend({
 	initialize: function() {
 		this.set({uid: guid()});
 		this.constructBatch();
+		this.constructPropBatch();
 	},
 	defaults: {
 		uid: 0,
@@ -64,7 +72,8 @@ var backboneModel_VideoField = backboneModel_Field.extend({
 		language: 'und',
 		default: 'yes',
 		enabled: true,
-		batch: 'error:002-video-default'
+		batch: 'error:003-video-default',
+		propBatch: 'error:004-video-default'
 	},
 	constructBatch: function() {
 		var bat = '--track-name "abTRACKba:abTITLEba" --language abTRACKba:abLANGUAGEba --default-track abTRACKba:abDEFAULTba';
@@ -74,6 +83,15 @@ var backboneModel_VideoField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abDEFAULTba',this.get('default'));
 
 		this.set({batch:bat});
+	},
+	constructPropBatch: function() {
+		var bat = '--edit track:abTRACKba --set "name=abTITLEba" --set language=abLANGUAGEba --set flag-default=abDEFAULTba';
+		bat = __replace(bat, 'abTRACKba',this.get('trackNumber')+1);
+		bat = __replace(bat, 'abTITLEba',this.get('title'));
+		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
+		bat = __replace(bat, 'abDEFAULTba',__changeYesNo(this.get('default')));
+		
+		this.set({propBatch:bat});
 	}
 });
 
@@ -82,6 +100,7 @@ var backboneModel_AudioField = backboneModel_Field.extend({
 	initialize: function() {
 		this.set({uid: guid()});
 		this.constructBatch();
+		this.constructPropBatch();
 	},
 	defaults: {
 		uid: 0,
@@ -92,7 +111,8 @@ var backboneModel_AudioField = backboneModel_Field.extend({
 		language: 'und',
 		default: 'yes',
 		enabled: true,
-		batch: 'error:003-audio-default'
+		batch: 'error:003-audio-default',
+		propBatch: 'error:004-audio-default'
 	},
 	constructBatch: function() {
 		var bat = '--track-name "abTRACKba:abTITLEba" --language abTRACKba:abLANGUAGEba --default-track abTRACKba:abDEFAULTba';
@@ -102,6 +122,15 @@ var backboneModel_AudioField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abDEFAULTba',this.get('default'));
 
 		this.set({batch:bat});
+	},
+	constructPropBatch: function() {
+		var bat = '--edit track:abTRACKba --set "name=abTITLEba" --set language=abLANGUAGEba --set flag-default=abDEFAULTba';
+		bat = __replace(bat, 'abTRACKba',this.get('trackNumber')+1);
+		bat = __replace(bat, 'abTITLEba',this.get('title'));
+		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
+		bat = __replace(bat, 'abDEFAULTba',__changeYesNo(this.get('default')));
+		
+		this.set({propBatch:bat});
 	}
 });
 
@@ -110,6 +139,7 @@ var backboneModel_SubtitleField = backboneModel_Field.extend({
 	initialize: function() {
 		this.set({uid: guid()});
 		this.constructBatch();
+		this.constructPropBatch();
 	},
 	defaults: {
 		uid: 0,
@@ -121,7 +151,9 @@ var backboneModel_SubtitleField = backboneModel_Field.extend({
 		default: 'yes',
 		forced: 'yes',
 		enabled: true,
-		batch: 'error:003-subtitle-default'
+		batch: 'error:003-subtitle-default',
+		propBatch: 'error:004-subtitle-default'
+		
 	},
 	constructBatch: function() {
 		var bat = '--track-name "abTRACKba:abTITLEba" --language abTRACKba:abLANGUAGEba --default-track abTRACKba:abDEFAULTba --forced-track abTRACKba:abFORCEDba';
@@ -132,6 +164,16 @@ var backboneModel_SubtitleField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abFORCEDba',this.get('forced'));
 
 		this.set({batch:bat});
+	},
+	constructPropBatch: function() {
+		var bat = '--edit track:abTRACKba --set "name=abTITLEba" --set language=abLANGUAGEba --set flag-default=abDEFAULTba --set flag-forced=abFORCEDba';
+		bat = __replace(bat, 'abTRACKba',this.get('trackNumber')+1);
+		bat = __replace(bat, 'abTITLEba',this.get('title'));
+		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
+		bat = __replace(bat, 'abDEFAULTba',__changeYesNo(this.get('default')));
+		bat = __replace(bat, 'abFORCEDba',__changeYesNo(this.get('forced')));
+		
+		this.set({propBatch:bat});
 	}
 });
 
@@ -149,6 +191,7 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 		});
 		this.on('change', function(model) {
 			model.constructBatch();
+			model.constructPropBatch();
 		});
 	},
 	reOrderSortedTrackOrder: function(order) {
@@ -157,8 +200,28 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 			if (curModel.get('enabled')) {
 				curModel.set('sortedTrackNumber', order[i]);
 				curModel.constructBatch();
+				curModel.constructPropBatch();
 			}
 		}
+	},
+	checkIfDisabled: function() {
+		for (var i = 0; i < this.length; i++) {
+			var curModel = this.models[i];
+			if (!curModel.get('enabled')) {
+				return true;
+			}
+		}
+		return false;
+	},
+	checkIfOutOfORder: function() {
+		
+		for (var i = 0; i < this.length; i++) {
+			var curModel = this.models[i];
+			if (curModel.get('trackNumber') != curModel.get('sortedTrackNumber')) {
+				return true;
+			}
+		}
+		return false;
 	},
 	printBatch: function(deleteAllVideo, deleteAllAudio, deleteAllSubtitle) {
 		var removeVideo = false;
@@ -210,6 +273,14 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 		}
 		return batchScript;
 	},
+	printPropBatch: function() {
+		var batchScript = '';
+		for (var i = 0; i < this.length; i++) {
+			var curModel = this.models[i];
+			batchScript += ' ' + curModel.get('propBatch');
+		}
+		return batchScript;
+	},
 	printTrackOrder: function() {
 		var order = '';
 		for (var i = 0; i < this.length; i++) {
@@ -227,6 +298,7 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 			currentModel.set('trackNumber', i);
 			currentModel.set('sortedTrackNumber', i);
 			currentModel.constructBatch();
+			currentModel.constructPropBatch();
 		}
 	}
 });
@@ -401,6 +473,7 @@ var backboneView_Fields = Backbone.View.extend({
 			numberArray.push($(this).attr('data-track'));
 		});
 		this.collection.reOrderSortedTrackOrder(numberArray);
+		updatePropFlag(view['collection']);
 	},
 	//Everytime the user selects a new input field, set the local variable to represent the model.
 	//Saves resources instead of searching for the model every key press the user makes.
@@ -423,6 +496,7 @@ var backboneView_Fields = Backbone.View.extend({
 			if (curModel.get('uid') === uid) {
 				curModel.switchEnabled();
 				this.render();
+				updatePropFlag(view['collection']);
 				break;
 			}
 		}
