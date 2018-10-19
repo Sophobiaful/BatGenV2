@@ -49,7 +49,7 @@ $(document).ready(function() {
 		updateBatchText(view['collection']);
 	});
 
-	$('#batchRemoveVideo,#batchRemoveAudio,#batchRemoveSubtitle').change(function() {
+	$('#batchRemoveVideo,#batchRemoveAudio,#batchRemoveSubtitle,#forceMkvMerge').change(function() {
 		updatePropFlag(view['collection']);
 	});
 

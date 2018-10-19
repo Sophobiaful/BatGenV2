@@ -18,17 +18,24 @@ function updatePropFlag(sentCollection) {
 	var removeVideo = $('#batchRemoveVideo').is(':checked');
 	var removeAudio = $('#batchRemoveAudio').is(':checked');
 	var removeSubtitle = $('#batchRemoveSubtitle').is(':checked');
-
+	var forceMkvMerge = $('#forceMkvMerge').is(':checked');
+	
 	propFlag = true;
 	
+	//Checks to see if the force mkvmerge checkbox is checked.
+	if (forceMkvMerge) {
+		propFlag = false;
+	}
 	//Checks to see if removing any types of tracks.
 	if (removeVideo || removeAudio || removeSubtitle) {
 		propFlag = false;
 	}
+	//HAVEN'T DECIDED IF I WANT TO KEEP THIS.
 	//Checks to see if any tracks are disabled.
-	if (sentCollection.checkIfDisabled()) {
+	/*if (sentCollection.checkIfDisabled()) {
 		propFlag = false;
-	}
+	}*/
+	
 	//Checks to see if any tracks are out of order.
 	if (sentCollection.checkIfOutOfORder()) {
 		propFlag = false;

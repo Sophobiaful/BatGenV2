@@ -71,25 +71,28 @@ var backboneModel_VideoField = backboneModel_Field.extend({
 		title: '',
 		language: 'und',
 		default: 'yes',
+		forced: 'yes',
 		enabled: true,
 		batch: 'error:003-video-default',
 		propBatch: 'error:004-video-default'
 	},
 	constructBatch: function() {
-		var bat = '--track-name "abTRACKba:abTITLEba" --language abTRACKba:abLANGUAGEba --default-track abTRACKba:abDEFAULTba';
+		var bat = '--track-name "abTRACKba:abTITLEba" --language abTRACKba:abLANGUAGEba --default-track abTRACKba:abDEFAULTba --forced-track abTRACKba:abFORCEDba';
 		bat = __replace(bat, 'abTRACKba',this.get('trackNumber'));
 		bat = __replace(bat, 'abTITLEba',this.get('title'));
 		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
 		bat = __replace(bat, 'abDEFAULTba',this.get('default'));
+		bat = __replace(bat, 'abFORCEDba',this.get('forced'));
 
 		this.set({batch:bat});
 	},
 	constructPropBatch: function() {
-		var bat = '--edit track:abTRACKba --set "name=abTITLEba" --set language=abLANGUAGEba --set flag-default=abDEFAULTba';
+		var bat = '--edit track:abTRACKba --set "name=abTITLEba" --set language=abLANGUAGEba --set flag-default=abDEFAULTba --set flag-forced=abFORCEDba';
 		bat = __replace(bat, 'abTRACKba',this.get('trackNumber')+1);
 		bat = __replace(bat, 'abTITLEba',this.get('title'));
 		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
 		bat = __replace(bat, 'abDEFAULTba',__changeYesNo(this.get('default')));
+		bat = __replace(bat, 'abFORCEDba',__changeYesNo(this.get('forced')));
 		
 		this.set({propBatch:bat});
 	}
@@ -110,25 +113,28 @@ var backboneModel_AudioField = backboneModel_Field.extend({
 		title: '',
 		language: 'und',
 		default: 'yes',
+		forced: 'yes',
 		enabled: true,
 		batch: 'error:003-audio-default',
 		propBatch: 'error:004-audio-default'
 	},
 	constructBatch: function() {
-		var bat = '--track-name "abTRACKba:abTITLEba" --language abTRACKba:abLANGUAGEba --default-track abTRACKba:abDEFAULTba';
+		var bat = '--track-name "abTRACKba:abTITLEba" --language abTRACKba:abLANGUAGEba --default-track abTRACKba:abDEFAULTba --forced-track abTRACKba:abFORCEDba';
 		bat = __replace(bat, 'abTRACKba',this.get('trackNumber'));
 		bat = __replace(bat, 'abTITLEba',this.get('title'));
 		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
 		bat = __replace(bat, 'abDEFAULTba',this.get('default'));
+		bat = __replace(bat, 'abFORCEDba',this.get('forced'));
 
 		this.set({batch:bat});
 	},
 	constructPropBatch: function() {
-		var bat = '--edit track:abTRACKba --set "name=abTITLEba" --set language=abLANGUAGEba --set flag-default=abDEFAULTba';
+		var bat = '--edit track:abTRACKba --set "name=abTITLEba" --set language=abLANGUAGEba --set flag-default=abDEFAULTba --set flag-forced=abFORCEDba';
 		bat = __replace(bat, 'abTRACKba',this.get('trackNumber')+1);
 		bat = __replace(bat, 'abTITLEba',this.get('title'));
 		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
 		bat = __replace(bat, 'abDEFAULTba',__changeYesNo(this.get('default')));
+		bat = __replace(bat, 'abFORCEDba',__changeYesNo(this.get('forced')));
 		
 		this.set({propBatch:bat});
 	}
@@ -214,7 +220,6 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 		return false;
 	},
 	checkIfOutOfORder: function() {
-		
 		for (var i = 0; i < this.length; i++) {
 			var curModel = this.models[i];
 			if (curModel.get('trackNumber') != curModel.get('sortedTrackNumber')) {
@@ -277,7 +282,10 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 		var batchScript = '';
 		for (var i = 0; i < this.length; i++) {
 			var curModel = this.models[i];
-			batchScript += ' ' + curModel.get('propBatch');
+			if (curModel.get('enabled')) {	
+				batchScript += ' ' + curModel.get('propBatch');
+			}
+			else {}
 		}
 		return batchScript;
 	},
@@ -362,6 +370,10 @@ var backboneView_Fields = Backbone.View.extend({
 							disabled:curModel.outputEnabled()
 						}
 					},
+					ddForced: {
+						item:temp_DDForced,
+						variables:{
+							options:createDropdownOptions(ddForcedContents, curModel.get('forced')), disabled:curModel.outputEnabled() }},
 					buttons: {
 						item:temp_Buttons
 					}
@@ -393,6 +405,10 @@ var backboneView_Fields = Backbone.View.extend({
 							disabled:curModel.outputEnabled()
 						}
 					},
+					ddForced: {
+						item:temp_DDForced,
+						variables:{
+							options:createDropdownOptions(ddForcedContents, curModel.get('forced')), disabled:curModel.outputEnabled() }},
 					buttons: {
 						item:temp_Buttons
 					}
@@ -496,7 +512,6 @@ var backboneView_Fields = Backbone.View.extend({
 			if (curModel.get('uid') === uid) {
 				curModel.switchEnabled();
 				this.render();
-				updatePropFlag(view['collection']);
 				break;
 			}
 		}
