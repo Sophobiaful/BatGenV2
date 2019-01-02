@@ -99,6 +99,11 @@ $border_radius_field: 3px;
 		height: 30px !important;
 		padding: 0 5px 0 5px !important;
 	}
+	.replacementText {
+		width: 100%;
+		height: 30px !important;
+		padding: 0 5px 0 5px !important;
+	}
 	.video {
 		width: 400px;
 		+ label {
@@ -279,7 +284,38 @@ $border_radius_field: 3px;
 	}
 	.default-mkvmerge-location-area {
 		width: 35%;
-		height: 100px;
+		height: 50px;
+	}
+	.bottomRightOptions {
+		height: 30px;
+		width: 35%;
+		position: relative;
+		left: 62.5%;
+		bottom: 20px;
+
+		div {
+			height: 100%;
+			display: inline-block;
+			vertical-align: top;
+		}
+		.container-checkbox span {
+			vertical-align: middle;
+		}
+		.replaceUnderlineArea {
+			width: 50%;
+			margin-right: 0;
+			padding-right: 0;
+		}
+		.blank_divider {
+			display: inline-block;
+			width: 12.5%;
+			height: 30px;
+			vertical-align: middle;
+		}
+		.container-textbox {
+			width: 30%;
+			margin: -3.5px 0 0 7px !important;
+		}
 	}
 }
 

@@ -19,9 +19,9 @@ function updatePropFlag(sentCollection) {
 	var removeAudio = $('#batchRemoveAudio').is(':checked');
 	var removeSubtitle = $('#batchRemoveSubtitle').is(':checked');
 	var forceMkvMerge = $('#forceMkvMerge').is(':checked');
-	
+
 	propFlag = true;
-	
+
 	//Checks to see if the force mkvmerge checkbox is checked.
 	if (forceMkvMerge) {
 		propFlag = false;
@@ -35,7 +35,7 @@ function updatePropFlag(sentCollection) {
 	/*if (sentCollection.checkIfDisabled()) {
 		propFlag = false;
 	}*/
-	
+
 	//Checks to see if any tracks are out of order.
 	if (sentCollection.checkIfOutOfORder()) {
 		propFlag = false;
@@ -83,12 +83,13 @@ function updateBatchText(sentCollection) {
 	var removeAudio = $('#batchRemoveAudio').is(':checked');
 	var removeSubtitle = $('#batchRemoveSubtitle').is(':checked');
 
+	var replaceUnderlines = $('#replaceUnderline').val();
 
 	var batchScript = '';
-	
+
 	if (propFlag) { mkvLocation = mkvLocation + 'mkvpropedit.exe'; } else { mkvLocation = mkvLocation + 'mkvmerge.exe';  }
-	
-	
+
+
 	batchScript += 'setlocal DisableDelayedExpansion\n\
 set mkvexe="' + mkvLocation + '"\n\
 set "output_folder=%cd%\\Muxing"\n\
@@ -110,13 +111,17 @@ for /F "tokens=1* delims=- " %%A in ("%ep%") do (\n\
 		set "ep_num=%%D"\n\
 	)\n\
 )\n'
+	if (replaceUnderlines) {
+		batchScript += 'set replacementText=^' + replaceUnderlines + '\n';
+		batchScript += 'call set ep_name=%%ep_name:^_=%replacementText%%%\n';
+	}
 	if (propFlag) {
 		batchScript += 'call %mkvexe% "%fi%"';
 	}
 	else {
 		batchScript += 'call %mkvexe% -o "%output_folder%\\%ep%.mkv"';
 	}
-	
+
 	//Adds the batch for each track.
 	if (propFlag) { batchScript += sentCollection.printPropBatch(); } else { batchScript += sentCollection.printBatch(); }
 

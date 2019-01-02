@@ -23,7 +23,7 @@ $(document).ready(function() {
 	});
 
 
-	$('#batchFileTitle,#batchMKVLocation').keyup(function() {
+	$('#batchFileTitle,#batchMKVLocation,#replaceUnderline').keyup(function() {
 		updateBatchText(view['collection']);
 	});
 
