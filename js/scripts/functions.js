@@ -1,7 +1,9 @@
+//Replace text in a string.
 function __replace(original, to_replace, with_replace) {
 	var word = original.replace(new RegExp(to_replace,'g'), with_replace);
 	return word;
 }
+//Convert yes and no to 1 and 0.
 function __changeYesNo(original) {
 	if (original === 'yes') {
 		return 1;
@@ -14,6 +16,7 @@ function __changeYesNo(original) {
 	}
 }
 
+//Updates the flag indicating when to use mkvpropedit or mkvmerge.
 function updatePropFlag(sentCollection) {
 	var removeVideo = $('#batchRemoveVideo').is(':checked');
 	var removeAudio = $('#batchRemoveAudio').is(':checked');
@@ -30,11 +33,6 @@ function updatePropFlag(sentCollection) {
 	if (removeVideo || removeAudio || removeSubtitle) {
 		propFlag = false;
 	}
-	//HAVEN'T DECIDED IF I WANT TO KEEP THIS.
-	//Checks to see if any tracks are disabled.
-	/*if (sentCollection.checkIfDisabled()) {
-		propFlag = false;
-	}*/
 
 	//Checks to see if any tracks are out of order.
 	if (sentCollection.checkIfOutOfORder()) {
@@ -43,6 +41,7 @@ function updatePropFlag(sentCollection) {
 	updateBatchText(sentCollection);
 }
 
+//Generates a random guid, used for field id's.
 function guid() {
 	function s4() {
 		return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
@@ -50,6 +49,7 @@ function guid() {
 	return s4() + s4();
 }
 
+//Create dropdown menu based on array of fields/values.
 function createDropdownOptions(array, currentlySelected) {
 	var html = '';
 	for (var i = 0; i < array.length; i++) {
@@ -177,4 +177,28 @@ set /a "counter=%counter%+1"\n';
 	batchScript += 'goto :eof';
 
 	$('#downloadText').text(batchScript);
+}
+
+//Generates the batch for mkvmerge.
+function generateMkvMergeBatch() {
+	var mkvLocation = $('#batchMKVLocation').val();
+	var fileTitle = $('#batchFileTitle').val();
+
+	var counter = $('#batchCounter').val();
+	var counter10 = $('#batchCounter10').is(':checked');
+	var counter100 = $('#batchCounter100').is(':checked');
+	var counter1000 = $('#batchCounter1000').is(':checked');
+
+	var removeVideo = $('#batchRemoveVideo').is(':checked');
+	var removeAudio = $('#batchRemoveAudio').is(':checked');
+	var removeSubtitle = $('#batchRemoveSubtitle').is(':checked');
+
+	var replaceUnderlines = $('#replaceUnderline').val();
+
+
+}
+
+//Generates the batch for mkvpropedit.
+function generateMkvPropEditBatch() {
+
 }
