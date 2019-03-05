@@ -85,9 +85,19 @@ function updateBatchText(sentCollection) {
 
 	var replaceUnderlines = $('#replaceUnderline').val();
 
+	var removeLeadingZeroSeason = $('#removeLeadingZeroSeason').is(':checked');
+	var removeLeadingZeroEpisode = $('#removeLeadingZeroEpisode').is(':checked');
+
 	var batchScript = '';
 
-	if (propFlag) { mkvLocation = mkvLocation + 'mkvpropedit.exe'; } else { mkvLocation = mkvLocation + 'mkvmerge.exe';  }
+
+
+	if (propFlag) {
+		mkvLocation = mkvLocation + 'mkvpropedit.exe';
+	}
+	else {
+		mkvLocation = mkvLocation + 'mkvmerge.exe';
+	}
 
 
 	batchScript += 'setlocal DisableDelayedExpansion\n\
@@ -111,10 +121,20 @@ for /F "tokens=1* delims=- " %%A in ("%ep%") do (\n\
 		set "ep_num=%%D"\n\
 	)\n\
 )\n'
+
+
 	if (replaceUnderlines) {
 		batchScript += 'set replacementText=^' + replaceUnderlines + '\n';
 		batchScript += 'call set ep_name=%%ep_name:^_=%replacementText%%%\n';
 	}
+	if (removeLeadingZeroSeason) {
+		batchScript += 'SET /a ep_seas = 1%ep_seas%-(11%ep_seas%-1%ep_seas%)/10\n';
+	}
+	if (removeLeadingZeroEpisode) {
+		batchScript += 'SET /a ep_num = 1%ep_num%-(11%ep_num%-1%ep_num%)/10\n';
+	}
+
+
 	if (propFlag) {
 		batchScript += 'call %mkvexe% "%fi%"';
 	}
@@ -122,8 +142,15 @@ for /F "tokens=1* delims=- " %%A in ("%ep%") do (\n\
 		batchScript += 'call %mkvexe% -o "%output_folder%\\%ep%.mkv"';
 	}
 
+
 	//Adds the batch for each track.
-	if (propFlag) { batchScript += sentCollection.printPropBatch(); } else { batchScript += sentCollection.printBatch(); }
+	if (propFlag) {
+		batchScript += sentCollection.printPropBatch();
+	}
+	else {
+		batchScript += sentCollection.printBatch();
+	}
+
 
 	if (removeVideo) {
 		batchScript += ' --no-video';
@@ -134,6 +161,7 @@ for /F "tokens=1* delims=- " %%A in ("%ep%") do (\n\
 	if (removeSubtitle) {
 		batchScript += ' --no-subtitles';
 	}
+
 
 	if (propFlag) {
 		batchScript += ' --edit info --set "title=' + fileTitle + '"\n';
@@ -148,6 +176,8 @@ for /F "tokens=1* delims=- " %%A in ("%ep%") do (\n\
 	batchScript += 'set /a counter=10000%counter% %% 10000\n\
 set /a "counter=%counter%+1"\n';
 
+
+	//Adds the counter options.
 	if (counter1000) {
 		batchScript += 'if %counter% GTR %ep_thousands% (\n\
 	set counter=%counter%\n\
@@ -177,28 +207,4 @@ set /a "counter=%counter%+1"\n';
 	batchScript += 'goto :eof';
 
 	$('#downloadText').text(batchScript);
-}
-
-//Generates the batch for mkvmerge.
-function generateMkvMergeBatch() {
-	var mkvLocation = $('#batchMKVLocation').val();
-	var fileTitle = $('#batchFileTitle').val();
-
-	var counter = $('#batchCounter').val();
-	var counter10 = $('#batchCounter10').is(':checked');
-	var counter100 = $('#batchCounter100').is(':checked');
-	var counter1000 = $('#batchCounter1000').is(':checked');
-
-	var removeVideo = $('#batchRemoveVideo').is(':checked');
-	var removeAudio = $('#batchRemoveAudio').is(':checked');
-	var removeSubtitle = $('#batchRemoveSubtitle').is(':checked');
-
-	var replaceUnderlines = $('#replaceUnderline').val();
-
-
-}
-
-//Generates the batch for mkvpropedit.
-function generateMkvPropEditBatch() {
-
 }

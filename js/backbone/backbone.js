@@ -93,7 +93,7 @@ var backboneModel_VideoField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
 		bat = __replace(bat, 'abDEFAULTba',__changeYesNo(this.get('default')));
 		bat = __replace(bat, 'abFORCEDba',__changeYesNo(this.get('forced')));
-		
+
 		this.set({propBatch:bat});
 	}
 });
@@ -135,7 +135,7 @@ var backboneModel_AudioField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
 		bat = __replace(bat, 'abDEFAULTba',__changeYesNo(this.get('default')));
 		bat = __replace(bat, 'abFORCEDba',__changeYesNo(this.get('forced')));
-		
+
 		this.set({propBatch:bat});
 	}
 });
@@ -159,7 +159,7 @@ var backboneModel_SubtitleField = backboneModel_Field.extend({
 		enabled: true,
 		batch: 'error:003-subtitle-default',
 		propBatch: 'error:004-subtitle-default'
-		
+
 	},
 	constructBatch: function() {
 		var bat = '--track-name "abTRACKba:abTITLEba" --language abTRACKba:abLANGUAGEba --default-track abTRACKba:abDEFAULTba --forced-track abTRACKba:abFORCEDba';
@@ -178,7 +178,7 @@ var backboneModel_SubtitleField = backboneModel_Field.extend({
 		bat = __replace(bat, 'abLANGUAGEba',this.get('language'));
 		bat = __replace(bat, 'abDEFAULTba',__changeYesNo(this.get('default')));
 		bat = __replace(bat, 'abFORCEDba',__changeYesNo(this.get('forced')));
-		
+
 		this.set({propBatch:bat});
 	}
 });
@@ -282,7 +282,7 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 		var batchScript = '';
 		for (var i = 0; i < this.length; i++) {
 			var curModel = this.models[i];
-			if (curModel.get('enabled')) {	
+			if (curModel.get('enabled')) {
 				batchScript += ' ' + curModel.get('propBatch');
 			}
 			else {}
@@ -339,7 +339,7 @@ var backboneView_Fields = Backbone.View.extend({
 		for (var i = 0; i < this.collection.length; i++) {
 			var curModel = this.collection.models[i];
 			if (curModel.get('enabled')) {
-				numbers += '<div class="no-select" data-track="' + curModel.get('trackNumber') + '">' + (curModel.get('trackNumber') + 1) + '</div> ';
+				numbers += '<div class="hover-cursor no-select" data-track="' + curModel.get('trackNumber') + '">' + (curModel.get('trackNumber') + 1) + '</div> ';
 			}
 			else {
 				numbers += '<div class="hidden" data-track="' + curModel.get('trackNumber') + '">' + (curModel.get('trackNumber') + 1) + '</div> ';

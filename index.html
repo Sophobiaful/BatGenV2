@@ -13,7 +13,6 @@
 		</noscript>
 		<link rel='stylesheet' type='text/css' href='stylesheets/css/normalize.css' />
 		<link rel='stylesheet' type='text/css' href='stylesheets/css/style.css' />
-		<link rel='stylesheet' type='text/css' href='stylesheets/css/animate.css' />
 		<link rel='stylesheet' type='text/css' href='stylesheets/css/checkboxes.css' />
 		<link rel='stylesheet' type='text/css' href='stylesheets/css/popper.css' />
 	</head>
@@ -117,13 +116,34 @@
 			</span>
 		</header>
 
-
 		<div id='content' class='body'>
+			<div class='side-option font-dosis'>
+				<div id='moreOptionsArea' class='side-option-area closed'>
+					<section class='close-more-options'>
+						<img id='closeOptionsButton' src='images/cross2_small.png' class='hover-cursor' />
+					</section>
+					<section class='remove-leading-zero'>
+						<p class='title'>Remove Leading Zeroes</p>
+						<div class='no-select container-checkbox'>
+		 					  <input type='checkbox' id='removeLeadingZeroSeason' name='removeLeadingZeroSeason' />
+		 					  <label for='removeLeadingZeroSeason' class='check-box'></label>
+		 					  <span>Seasons</span>
+		 				 </div>
+						 <div class='no-select container-checkbox'>
+	 	 					  <input type='checkbox' id='removeLeadingZeroEpisode' name='removeLeadingZeroEpisode' />
+	 	 					  <label for='removeLeadingZeroEpisode' class='check-box'></label>
+	 	 					  <span>Episodes</span>
+	 	 				 </div>
+					</section>
+				</div>
+				<span id='openOptionsButton' class='button-open-option no-select hover-cursor'>OPTIONS</span>
+			</div>
+
 			<div class='option-area font-dosis'>
 				<div class='new-field-area'>
-					<div id='addTrackVideo' class='new-field-button no-select video'>VIDEO</div>
-					<div id='addTrackAudio' class='new-field-button no-select audio'>AUDIO</div>
-					<div id='addTrackSubtitle' class='new-field-button no-select subtitle'>SUBTITLE</div>
+					<div id='addTrackVideo' class='new-field-button no-select video hover-cursor'>VIDEO</div>
+					<div id='addTrackAudio' class='new-field-button no-select audio hover-cursor'>AUDIO</div>
+					<div id='addTrackSubtitle' class='new-field-button no-select subtitle hover-cursor'>SUBTITLE</div>
 				</div>
 				<div class='counter-start-area'>
 					<span>Counter Start Number</span>
@@ -150,7 +170,7 @@
 				   </div>
 				</div>
 				<div class='remove-tracks-area'>
-					<span>Remove ALL Tracks<span id='infoRemoveTracks' class='info-circle no-select'>!</span></span>
+					<span>Remove ALL Tracks<span id='infoRemoveTracks' class='info-circle hover-cursor no-select'>!</span></span>
 					<div class='no-select container-checkbox'>
 	 					  <input type='checkbox' id='batchRemoveVideo' name='batchRemoveVideo' />
 	 					  <label for='batchRemoveVideo' class='check-box'></label>
@@ -200,7 +220,7 @@
 
 			<div class='download-area'>
 				<div class='button-area'>
-					<div id='buttonDownload' class='button left font-dosis no-select'>DOWNLOAD</div><div id='buttonCopy' class='button right font-dosis no-select'>COPY TEXT</div>
+					<div id='buttonDownload' class='button left font-dosis no-select hover-cursor'>DOWNLOAD</div><div id='buttonCopy' class='button right font-dosis no-select'>COPY TEXT</div>
 				</div>
 				<textarea id='downloadText' spellcheck='false' disabled></textarea>
 			</div>
@@ -243,10 +263,10 @@
 			</div>
 		</script>
 		<script type='text/template' id='Buttons-template'>
-			<div class='container-delete-track listener-deleteTrack'>
+			<div class='container-delete-track hover-cursor listener-deleteTrack'>
 				<img src='images/skull2_small.png' />
 			</div>
-			<div class='container-remove-track listener-removeTrack'>
+			<div class='container-remove-track hover-cursor listener-removeTrack'>
 				<img src='images/cross2_small.png' />
 			</div>
 		</script>

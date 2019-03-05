@@ -1,4 +1,12 @@
 $(document).ready(function() {
+	$('#openOptionsButton').click(function() {
+		$('#moreOptionsArea').removeClass('closed');
+	});
+	$('#closeOptionsButton').click(function() {
+		$('#moreOptionsArea').addClass('closed');
+	});
+
+
 	$('#addTrackVideo').click(function() {
 		updateViewAndInfo(view, collection, new backboneModel_VideoField());
 	});
@@ -36,16 +44,9 @@ $(document).ready(function() {
 		updateBatchText(view['collection']);
 	});
 	$('#batchCounter100').change(function() {
-		if ($('#batchCounter100').is(':checked')) {
-			$('#batchCounter10').prop('checked',true);
-		}
 		updateBatchText(view['collection']);
 	});
 	$('#batchCounter1000').change(function() {
-		if ($('#batchCounter1000').is(':checked')) {
-			$('#batchCounter10').prop('checked',true);
-			$('#batchCounter100').prop('checked',true);
-		}
 		updateBatchText(view['collection']);
 	});
 
