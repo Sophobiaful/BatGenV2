@@ -19,6 +19,7 @@ $(document).ready(function() {
 
 
 
+
 	//Hotkeys.
 	Mousetrap.bind('alt+1', function() {
 		$('#addTrackVideo').click();
@@ -52,6 +53,13 @@ $(document).ready(function() {
 
 	$('#batchRemoveVideo,#batchRemoveAudio,#batchRemoveSubtitle,#forceMkvMerge').change(function() {
 		updatePropFlag(view['collection']);
+	});
+
+	$('#removeLeadingZeroSeason').change(function() {
+		updateBatchText(view['collection']);
+	});
+	$('#removeLeadingZeroEpisode').change(function() {
+		updateBatchText(view['collection']);
 	});
 
 	$('#buttonDownload').click(function() {
