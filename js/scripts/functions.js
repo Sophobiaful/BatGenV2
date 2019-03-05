@@ -128,10 +128,10 @@ for /F "tokens=1* delims=- " %%A in ("%ep%") do (\n\
 		batchScript += 'call set ep_name=%%ep_name:^_=%replacementText%%%\n';
 	}
 	if (removeLeadingZeroSeason) {
-		batchScript += 'SET /a ep_seas = 1%ep_seas%-(11%ep_seas%-1%ep_seas%)/10\n';
+		batchScript += 'set /a ep_seas = 1%ep_seas%-(11%ep_seas%-1%ep_seas%)/10\n';
 	}
 	if (removeLeadingZeroEpisode) {
-		batchScript += 'SET /a ep_num = 1%ep_num%-(11%ep_num%-1%ep_num%)/10\n';
+		batchScript += 'set /a ep_num = 1%ep_num%-(11%ep_num%-1%ep_num%)/10\n';
 	}
 
 
