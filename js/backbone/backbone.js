@@ -228,7 +228,17 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 		}
 		return false;
 	},
-	printBatch: function(deleteAllVideo, deleteAllAudio, deleteAllSubtitle) {
+	printBatch: function(prop, removeFlags) {
+		var text = '';
+		if (prop) {
+			text = this.printMkvProp();
+		}
+		else {
+			text = this.printMkvMerge(removeFlags[0], removeFlags[1], removeFlags[2]);
+		}
+		return text;
+	},
+	printMkvMerge: function(deleteAllVideo, deleteAllAudio, deleteAllSubtitle) {
 		var removeVideo = false;
 		var removeAudio = false;
 		var removeSubtitle = false;
@@ -278,7 +288,7 @@ var backboneCollection_Fields = Backbone.Collection.extend({
 		}
 		return batchScript;
 	},
-	printPropBatch: function() {
+	printMkvProp: function() {
 		var batchScript = '';
 		for (var i = 0; i < this.length; i++) {
 			var curModel = this.models[i];

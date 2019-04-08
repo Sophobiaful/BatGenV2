@@ -69,8 +69,33 @@ function updateViewAndInfo(sentView, sentCollection, trackToAdd) {
 	sentView.render();
 }
 
+function experimentalBatch(sentCollection) {
+	var bat = new BatchGenerator(
+		sentCollection,
+		$('#batchMKVLocation').val(),
+		propFlag,
+		'mkv',
+		$('#batchFileTitle').val(),
+		$('#replaceUnderline').val(),
+		$('#batchRemoveVideo').is(':checked'),
+		$('#batchRemoveAudio').is(':checked'),
+		$('#batchRemoveSubtitle').is(':checked'),
+		$('#batchCounter').val(),
+		$('#batchCounter10').is(':checked'),
+		$('#batchCounter100').is(':checked'),
+		$('#batchCounter1000').is(':checked'),
+		$('#removeLeadingZeroSeason').is(':checked'),
+		$('#removeLeadingZeroEpisode').is(':checked')
+	);
+
+	$('#downloadText').text(bat.buildBatch());
+}
+
 //Creates the complete batch text.
 function updateBatchText(sentCollection) {
+	experimentalBatch(sentCollection);
+
+	/*
 	var mkvLocation = $('#batchMKVLocation').val();
 	var fileTitle = $('#batchFileTitle').val();
 
@@ -145,10 +170,10 @@ for /F "tokens=1* delims=- " %%A in ("%ep%") do (\n\
 
 	//Adds the batch for each track.
 	if (propFlag) {
-		batchScript += sentCollection.printPropBatch();
+		batchScript += sentCollection.printMkvProp();
 	}
 	else {
-		batchScript += sentCollection.printBatch();
+		batchScript += sentCollection.printMkvMerge();
 	}
 
 
@@ -207,4 +232,5 @@ set /a "counter=%counter%+1"\n';
 	batchScript += 'goto :eof';
 
 	$('#downloadText').text(batchScript);
+	*/
 }
