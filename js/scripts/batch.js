@@ -75,9 +75,6 @@ function BatchGenerator(collection, location, prop, fileType, fileTitle, replace
 	this.decideCounter = function() {
 		var text = '';
 		if (this.counterThousand) {
-			text += 'set /a counter=10000%counter% %% 10000\n';
-			text += 'set /a "counter=%counter%+1"\n';
-
 			text += 'if %counter% GTR %ep_thousands% (\n';
 			text += '	set counter=%counter%\n';
 			text += ') else if %counter% GTR %ep_hundreds% (\n';
@@ -89,9 +86,6 @@ function BatchGenerator(collection, location, prop, fileType, fileTitle, replace
 			text += ')\n';
 		}
 		else if (this.counterHundred) {
-			text += 'set /a counter=10000%counter% %% 10000\n'
-			text += 'set /a "counter=%counter%+1"\n';
-
 			text += 'if %counter% GTR %ep_hundreds% (\n';
 			text += '	set counter=%counter%\n';
 			text += ') else if %counter% GTR %ep_tens% (\n';
@@ -101,9 +95,6 @@ function BatchGenerator(collection, location, prop, fileType, fileTitle, replace
 			text += ')\n';
 		}
 		else if (this.counterTen) {
-			text += 'set /a counter=10000%counter% %% 10000\n'
-			text += 'set /a "counter=%counter%+1"\n';
-
 			text += 'if %counter% GTR %ep_tens% (\n';
 			text += '	set counter=%counter%\n';
 			text += ') else (\n';
