@@ -68,7 +68,7 @@ function BatchGenerator(collection, location, prop, fileType, fileTitle, replace
 			text += ' --no-audio';
 		}
 		if (this.removeTrackSubtitle) {
-			text += ' --no-subtitle';
+			text += ' --no-subtitles';
 		}
 		this.batchText += text;
 	};
