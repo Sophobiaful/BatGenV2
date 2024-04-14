@@ -354,7 +354,6 @@ var backboneView_Fields = Backbone.View.extend({
 			else {
 				numbers += '<div class="hidden" data-track="' + curModel.get('trackNumber') + '">' + (curModel.get('trackNumber') + 1) + '</div> ';
 			}
-			alert("actually changed2");
 			if (curModel.get('type') === 'video') {
 				html += temp_Video({
 					uid: curModel.get('uid'),
@@ -362,7 +361,7 @@ var backboneView_Fields = Backbone.View.extend({
 					textbox: {
 						item:temp_Textbox,
 						variables:{
-							label:'VIDEO' + i,
+							label: (i+1) + ' VIDEO',
 							className:'video',
 							modelTitle:curModel.get('title'),
 							disabled:curModel.outputEnabled()
@@ -397,7 +396,7 @@ var backboneView_Fields = Backbone.View.extend({
 					textbox: {
 						item:temp_Textbox,
 						variables:{
-							label:'AUDIO',
+							label: (i+1) + ' AUDIO',
 							className:'audio',
 							modelTitle:curModel.get('title'),
 							disabled:curModel.outputEnabled()
@@ -432,7 +431,7 @@ var backboneView_Fields = Backbone.View.extend({
 					textbox: {
 						item:temp_Textbox,
 						variables:{
-							label:'SUBTITLE',
+							label: (i+1) + ' SUBTITLE',
 							className:'subtitle',
 							modelTitle:curModel.get('title'),
 							disabled:curModel.outputEnabled()
