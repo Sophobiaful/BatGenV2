@@ -358,6 +358,7 @@ var backboneView_Fields = Backbone.View.extend({
 			if (curModel.get('type') === 'video') {
 				html += temp_Video({
 					uid: curModel.get('uid'),
+					counter: i,
 					textbox: {
 						item:temp_Textbox,
 						variables:{
