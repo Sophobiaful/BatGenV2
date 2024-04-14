@@ -239,6 +239,7 @@
 			<div class='container-textbox'>
 				<input type='text' class="listener-textbox <%= variables['className'] %>" value="<%= variables['modelTitle'] %>" <%= variables['disabled'] %> />
 				<label><%= variables['label'] %></label>
+				<div> <%= variables['counter'] %></div>
 			</div>
 		</script>
 		<script type='text/template' id='DropdownLanguage-template'>
@@ -273,7 +274,6 @@
 
 		<script type='text/template' id='VideoField-template'>
 			<div class='field' data-uid="<%= uid %>">
-				<div><%= counter %></div>
 				<%= textbox.item(textbox) %>
 				<%= ddDefault.item(ddDefault) %>
 				<%= ddLanguage.item(ddLanguage) %>

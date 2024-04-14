@@ -354,7 +354,7 @@ var backboneView_Fields = Backbone.View.extend({
 			else {
 				numbers += '<div class="hidden" data-track="' + curModel.get('trackNumber') + '">' + (curModel.get('trackNumber') + 1) + '</div> ';
 			}
-			alert("actually changed");
+			alert("actually changed2");
 			if (curModel.get('type') === 'video') {
 				html += temp_Video({
 					uid: curModel.get('uid'),
@@ -365,7 +365,8 @@ var backboneView_Fields = Backbone.View.extend({
 							label:'VIDEO',
 							className:'video',
 							modelTitle:curModel.get('title'),
-							disabled:curModel.outputEnabled()
+							disabled:curModel.outputEnabled(),
+							counter: 1
 						 }
 					 },
 					ddDefault: {
