@@ -354,10 +354,10 @@ var backboneView_Fields = Backbone.View.extend({
 			else {
 				numbers += '<div class="hidden" data-track="' + curModel.get('trackNumber') + '">' + (curModel.get('trackNumber') + 1) + '</div> ';
 			}
-			html += "<div>" + (i+1) + "</div>";
 			if (curModel.get('type') === 'video') {
 				html += temp_Video({
 					uid: curModel.get('uid'),
+					counter: (i+1),
 					textbox: {
 						item:temp_Textbox,
 						variables:{
