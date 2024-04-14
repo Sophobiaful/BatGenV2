@@ -362,11 +362,10 @@ var backboneView_Fields = Backbone.View.extend({
 					textbox: {
 						item:temp_Textbox,
 						variables:{
-							label:'VIDEO',
+							label:'VIDEO' + i,
 							className:'video',
 							modelTitle:curModel.get('title'),
-							disabled:curModel.outputEnabled(),
-							counter: 1
+							disabled:curModel.outputEnabled()
 						 }
 					 },
 					ddDefault: {
