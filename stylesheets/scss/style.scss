@@ -63,7 +63,7 @@ $border_radius_field: 3px;
 		outline: none;
 		border: 2px solid $color_scheme_disabled;
 		border-radius: $border_radius_field;
-		padding: 10px 10px 10px 135px;
+		padding: 10px 10px 10px 140px;
 		font-weight: bold;
 		background-color: $color_scheme_white;
 		&:focus {
@@ -104,19 +104,19 @@ $border_radius_field: 3px;
 		padding: 0 5px 0 5px !important;
 	}
 	.video {
-		width: 400px;
+		width: 600px;
 		+ label {
 			padding: 0 48px 0 20px !important;
 		}
 	}
 	.audio {
-		width: 400px;
+		width: 600px;
 		+ label {
-			padding: 0 47px 0 20px !important;
+			padding: 0 48px 0 20px !important;
 		}
 	}
 	.subtitle {
-		width: 400px;
+		width: 600px;
 		+ label {
 			padding: 0 20px 0 20px !important;
 		}
