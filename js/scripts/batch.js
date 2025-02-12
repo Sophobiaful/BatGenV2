@@ -1,4 +1,4 @@
-function BatchGenerator(collection, location, prop, fileType, fileTitle, replaceUnderline, removeTrackVideo, removeTrackAudio, removeTrackSubtitle, counterInitialValue, counterTen, counterHundred, counterThousand, removeLeadingZeroSeason, removeLeadingZeroEpisode) {
+function BatchGenerator(collection, location, prop, fileType, fileTitle, replaceUnderline, removeTrackVideo, removeTrackAudio, removeTrackSubtitle, counterInitialValue, counterTen, counterHundred, counterThousand, removeLeadingZeroSeason, removeLeadingZeroEpisode, disablePowershell) {
 	this.collection = collection;
 	this.batchText = '';
 
@@ -19,6 +19,8 @@ function BatchGenerator(collection, location, prop, fileType, fileTitle, replace
 
 	this.removeLeadingZeroSeason = removeLeadingZeroSeason;
 	this.removeLeadingZeroEpisode = removeLeadingZeroEpisode;
+
+	this.disablePowershell = disablePowershell;
 
 	this.decideLocation = function() {
 		var text = 'set mkvexe="';
@@ -139,12 +141,23 @@ function BatchGenerator(collection, location, prop, fileType, fileTitle, replace
 		this.batchText += 'set ep_tens=9\n';
 	};
 	this.buildCallLoop = function() {
-		this.batchText += 'for /r %%a in (*.' + this.fileType + ') do (\n';
-		this.batchText += '	set fi=%%a\n';
-		this.batchText += '	set ep=%%~na\n';
-		this.batchText += '	call :merge\n';
-		this.batchText += ')\n';
-		this.batchText += 'goto :eof;\n\n';
+		console.log(this.disablePowershell);
+		if (this.disablePowershell) {
+			this.batchText += 'for /r %%a in (*.' + this.fileType + ') do (\n';
+			this.batchText += '	set fi=%%a\n';
+			this.batchText += '	set ep=%%~na\n';
+			this.batchText += '	call :merge\n';
+			this.batchText += ')\n';
+			this.batchText += 'goto :eof;\n\n';
+		}
+		else {
+			this.batchText += 'for /F "delims=" %%a in (\'powershell -NoProfile -Command "Get-ChildItem -Path . -Filter \'*.' + this.fileType + '\' | Sort-Object { [int]($_.Name -replace \'^S(\\d+)E(\\d+).*$\', \'$1$2\') } | ForEach-Object { $_.FullName }"\') do (\n';
+			this.batchText += '	set fi=%%a\n';
+			this.batchText += '	set ep=%%~na\n';
+			this.batchText += '	call :merge\n';
+			this.batchText += ')\n';
+			this.batchText += 'goto :eof;\n\n';
+		}
 	};
 	this.buildMkvLoop = function() {
 		this.batchText += ':merge\n';

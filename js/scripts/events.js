@@ -62,6 +62,11 @@ $(document).ready(function() {
 		updateBatchText(view['collection']);
 	});
 
+	$('#disablePowershell').change(function() {
+		updateBatchText(view['collection']);
+	})
+
+
 	$('#buttonDownload').click(function() {
 		var blob = new Blob([$('#downloadText').val()], {type: "text/plain;charset=utf-8"});
 		saveAs(blob, "batgen.bat");

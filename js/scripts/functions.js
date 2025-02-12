@@ -85,7 +85,8 @@ function experimentalBatch(sentCollection) {
 		$('#batchCounter100').is(':checked'),
 		$('#batchCounter1000').is(':checked'),
 		$('#removeLeadingZeroSeason').is(':checked'),
-		$('#removeLeadingZeroEpisode').is(':checked')
+		$('#removeLeadingZeroEpisode').is(':checked'),
+		$('#disablePowershell').is(':checked')
 	);
 
 	$('#downloadText').text(bat.buildBatch());
