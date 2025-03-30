@@ -152,7 +152,7 @@ function BatchGenerator(collection, location, prop, fileType, fileTitle, replace
 		}
 		else {
 			this.batchText += `for /F "delims=" %%a in ('powershell -NoProfile -Command ^`;
-			this.batchText += ` "Get-ChildItem -Path . -Filter \\'*.mkv\\' | Sort-Object { [int]($_.Name -replace \\'^S(\\d+)E(\\d+).*$\\', \\'$1\\') }, { [int]($_.Name -replace \\'^S(\\d+)E(\\d+).*$\\', \\'$2\\') } | ForEach-Object { $_.FullName }"') do (`;
+			this.batchText += ` "Get-ChildItem -Path . -Filter \\'*.` + this.fileType + `\\' | Sort-Object { [int]($_.Name -replace \\'^S(\\d+)E(\\d+).*$\\', \\'$1\\') }, { [int]($_.Name -replace \\'^S(\\d+)E(\\d+).*$\\', \\'$2\\') } | ForEach-Object { $_.FullName }"') do (`;
 			this.batchText += '	set fi=%%a\n';
 			this.batchText += '	set ep=%%~na\n';
 			this.batchText += '	call :merge\n';
