@@ -15,7 +15,7 @@ var temp_Subtitle = _.template($('#SubtitleField-template').html());
 /*
 	Variables For Data Entry Forms
 */
-var ddLanguageContents = [['und','Undefined'], ['eng','English'], ['jpn','Japanese'], ['chi', 'Chinese'], ['cze', 'Czech'], ['dan', 'Danish'], ['dut', 'Dutch'], ['fin', 'Finnish'], ['fre','French'], ['ger','German'], ['gre', 'Greek: Modern'], ['ita', 'Italian'], ['kor', 'Korean'], ['nob', 'Norwegian'], ['pol', 'Polish'], ['por','Portuguese'], ['spa','Spanish'], ['swe', 'Swedish'], ['tha', 'Thai']];
+var ddLanguageContents = [['und','Undefined'], ['eng','English'], ['jpn','Japanese'], ['ara', 'Arabic'], ['chi', 'Chinese'], ['cze', 'Czech'], ['dan', 'Danish'], ['dut', 'Dutch'], ['fin', 'Finnish'], ['fre','French'], ['ger','German'], ['gre', 'Greek: Modern'], ['ita', 'Italian'], ['kor', 'Korean'], ['nob', 'Norwegian'], ['pol', 'Polish'], ['por','Portuguese'], ['spa','Spanish'], ['swe', 'Swedish'], ['tha', 'Thai']];
 var ddDefaultContents = [['yes','Yes'], ['no','No']];
 var ddForcedContents = [['yes','Yes'], ['no','No']];
 
