@@ -151,8 +151,8 @@ function BatchGenerator(collection, location, prop, fileType, fileTitle, replace
 			this.batchText += 'goto :eof;\n\n';
 		}
 		else {
-			this.batchText += `for /F "delims=" %%a in ('powershell -NoProfile -Command ^`;
-			this.batchText += ` "Get-ChildItem -Path . -Filter \\'*.` + this.fileType + `\\' | Sort-Object { [int]($_.Name -replace \\'^S(\\d+)E(\\d+).*$\\', \\'$1\\') }, { [int]($_.Name -replace \\'^S(\\d+)E(\\d+).*$\\', \\'$2\\') } | ForEach-Object { $_.FullName }"') do (\n`;
+			this.batchText += 'for /F "delims=" %%a in (\'powershell -NoProfile -Command ^';
+			this.batchText += ' "Get-ChildItem -Path . -Filter \'*.' + this.fileType + '\' | Sort-Object { [int]($_.Name -replace \'^S(\\d+)E(\\d+).*$\', \'$1\') }, { [int]($_.Name -replace \'^S(\\d+)E(\\d+).*$\', \'$2\') } | ForEach-Object { $_.FullName }"\') do (\n';
 			this.batchText += '	set fi=%%a\n';
 			this.batchText += '	set ep=%%~na\n';
 			this.batchText += '	call :merge\n';
